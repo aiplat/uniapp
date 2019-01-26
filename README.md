@@ -4,7 +4,7 @@
  - vue2+vuex+cmui+html5+css3
  - 一次开发，同时打包成Android版app、iOS版app、H5版、微信小程序版、支付宝小程序版、百度小程序版六个平台，界面统一，功能一致。
  - cmui仓库为https://github.com/womendi/cmui.git
- - 代码示例为http://www.aiplat.com的版本
+ - 代码示例为 http://www.aiplat.com 的版本 
 
 ---
 
