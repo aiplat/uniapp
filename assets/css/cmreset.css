@@ -1,0 +1,107 @@
+/*
+-----------------------------------------------------------------
+    *文 件 名：cmreset.css
+    *修 改 人：梁超明 womendi@qq.com
+    *最近修改：2019.01.24
+-----------------------------------------------------------------
+*/
+html {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+code,
+del,
+dfn,
+em,
+q,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+legend,
+caption,
+tbody,
+tfoot,
+thead,
+article,
+aside,
+dialog,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+button,
+input,
+optgroup,
+select,
+textarea,
+view,
+image{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none!important;
+}
+body {
+  font-size: 1em!important;
+  background: #fff;
+  font-family: 'Microsoft YaHei';
+  word-break: break-all;
+  word-wrap: break-word;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+  display: block;
+}
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+ul,
+ol,
+li{
+  list-style: none;
+}

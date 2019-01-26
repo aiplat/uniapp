@@ -1,0 +1,8 @@
+node_modules/
+dist/
+test/
+.idea/
+.vs/
+.vscode/
+nbproject/
+unpackage/dist
