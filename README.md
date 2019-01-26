@@ -27,7 +27,7 @@
 
 # 开发模式
 
- - 请在https://uniapp.dcloud.io/下载HBuilderX工具
- - 开发操作步骤请参照HBuilderX
+ - 请在 https://wwww.dcloud.io/ 下载HBuilderX工具
+ - 开发操作步骤请参照uni-app
 
 ---
