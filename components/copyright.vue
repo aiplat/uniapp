@@ -1,12 +1,17 @@
 <template>
-	<div class="cm_pf cm_pc_12 cm_hl3 cm_tc" :class="{'cm_b3e':isb0!=1,'cm_bl0':isb0==1}"  @click="$cm.toWin('',app.url)">
+	<div class="cm_pf cm_pc_12 cm_hl3 cm_tc" :class="{'cm_b3e':isCrB!='1','cm_bl0':isCrB=='1'}"  @click="$cm.toWin('',app.url)">
 		&copy;2016 {{app.name}} {{app.site}}
 	</div>
 </template>
 
 <script>
 	export default {
-		props: ['isb0'],
+		props: {
+			isCrB: {
+			  type: String,
+			  default: '',
+			}
+		},
 		data() {
 			return {
 				app: {
@@ -15,7 +20,6 @@
 				}
 			}
 		},
-		components: {},
 		methods: {
 
 		},

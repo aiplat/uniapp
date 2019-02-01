@@ -13,7 +13,7 @@
 					<div class="cm_pc_12 cm_prl05 cm_tc cm_hl3">{{message}}</div>
 				</ul>
 			</div>
-			<copyright2 isb0="1"></copyright2>
+			<copyright2 isCrB="1"></copyright2>
 		</div>
 	</div>
 </template>
