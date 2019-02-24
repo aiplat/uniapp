@@ -8,8 +8,11 @@
 						<span class="">{{indexData.desc}}</span>
 					</li>
 					<li class="cm_pc_12 cm_prl05 cm_tc cm_mb05">
-						<div class="cm_pc_6 cm_hl2" :class="{'cm_c1b cm_cf':dnid==k,'cm_be':dnid!=k}" @click="tsDnid(k)" v-for="(v,k) in indexData.dnarr"
-						 :key="k">{{v.name}}</div>
+						<div class="cm_pc_6 cm_hl2" :class="{'cm_c1b cm_cf':dnid==index,'cm_be':dnid!=index}" @click="tsDnid(index)" v-for="(v,index) in indexData.dnarr"
+						 :key="index">
+						    <span>{{v.name}}</span>
+						    <div class="cm_dn" v-for="(v2,index2) in indexData.dnarr" :key="index2">{{v2.name}}</div>
+						 </div>
 					</li>
 					<li class="cm_pc_12 cm_mb05" v-for="(v2,k2) in indexData.dnarr" :key="k2">
 						<image class="cm_h17 cm_fc" :src="v2.img" v-if="dnid==k2" />

@@ -783,52 +783,52 @@
   z-index: 999999 !important;
 }
 .cm_csd {
-  corsur: default !important;
+  cursor: default !important;
 }
 .cm_csa {
-  corsur: auto !important;
+  cursor: auto !important;
 }
 .cm_csc {
-  corsur: crosshair !important;
+  cursor: crosshair !important;
 }
 .cm_csp {
-  corsur: pointer !important;
+  cursor: pointer !important;
 }
 .cm_csm {
-  corsur: move !important;
+  cursor: move !important;
 }
 .cm_cse {
-  corsur: e-resize !important;
+  cursor: e-resize !important;
 }
 .cm_csne {
-  corsur: ne-resize !important;
+  cursor: ne-resize !important;
 }
 .cm_csnw {
-  corsur: nw-resize !important;
+  cursor: nw-resize !important;
 }
 .cm_csn {
-  corsur: n-resize !important;
+  cursor: n-resize !important;
 }
 .cm_csse {
-  corsur: se-resize !important;
+  cursor: se-resize !important;
 }
 .cm_cssw {
-  corsur: sw-resize !important;
+  cursor: sw-resize !important;
 }
 .cm_css {
-  corsur: s-resize !important;
+  cursor: s-resize !important;
 }
 .cm_cswr {
-  corsur: w-resize !important;
+  cursor: w-resize !important;
 }
 .cm_cst {
-  corsur: text !important;
+  cursor: text !important;
 }
 .cm_csw {
-  corsur: wait !important;
+  cursor: wait !important;
 }
 .cm_csh {
-  corsur: help !important;
+  cursor: help !important;
 }
 .cm_h05 {
   height: 0.5em !important;
