@@ -55,7 +55,7 @@
 
 ---
 
-##注意
+# 注意
  - 开发工具为任意，不一定要HbuilderX.如果也要同时打包成app，再导入项目到HbuilderX打包。
  - 开发或构建成其他平台命令：
  - 这六个平台标识：alipay、baidu、toutiao、app（包含安卓和ios）、h5
