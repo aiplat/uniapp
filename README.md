@@ -58,12 +58,12 @@
 ##注意
  - 开发工具为任意，不一定要HbuilderX.如果也要同时打包成app，再导入项目到HbuilderX打包。
  - 开发或构建成其他平台命令：
- --这六个平台标识：alipay、baidu、toutiao、app（包含安卓和ios）、h5
- --dev为开发模式，build为构建模式
- --参数--apptype=aiplat为项目名，默认aiplat。
- --例如：
- ---npm run dev-baidu为百度小程序开发模式
- ---npm run build-baidu为百度小程序构建模式
+ -- 这六个平台标识：alipay、baidu、toutiao、app（包含安卓和ios）、h5
+ -- dev为开发模式，build为构建模式
+ -- 参数--apptype=aiplat为项目名，默认aiplat。
+ -- 例如：
+ --- npm run dev-baidu为百度小程序开发模式
+ --- npm run build-baidu为百度小程序构建模式
 
 ---
 
