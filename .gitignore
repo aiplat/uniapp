@@ -6,3 +6,7 @@ test/
 .vscode/
 nbproject/
 unpackage/dist
+/src/envType.js
+/src/manifest.json
+/src/mpConf.js
+/src/pages.json

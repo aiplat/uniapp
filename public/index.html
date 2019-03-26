@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+    <meta name="keywords" content="AI智能空间,ai智能空间,人工智能空间,aiplat,ai,人工智能,智能空间,娱乐计分器,亲信地铁,亲信,地铁">
+    <meta name="description" content="AI智能空间,即将提供人工智能资讯,目标成为中国最大最全最专业的的人工智能资讯平台。">
+    <meta name="author" content="aiplat.com"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <meta name="renderer" content="webkit" aid="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="MobileOptimized" content="320">
+    <meta name="msapplication-tap-highlight" content="no">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.documentElement.style.fontSize = document.documentElement.clientWidth / 20 + 'px'
+        })
+        var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'))
+        document.write('<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' + (coverSupport ? ', viewport-fit=cover' : '') + '" />')
+    </script>
+    <link rel="stylesheet" href="<%= BASE_URL %>static/index.css"/>
+</head>
+
+<body>
+<noscript>
+    <strong>Please enable JavaScript to continue.</strong>
+</noscript>
+<div id="app"></div>
+<!-- built files will be auto injected -->
+</body>
+
+</html>

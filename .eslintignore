@@ -1,0 +1,7 @@
+/dist
+/node_modules
+/.idea
+/docs
+/src/statics
+/src/assets
+/public
