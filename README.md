@@ -4,8 +4,9 @@
  - 一次开发，同时打包成Android版app、iOS版app、H5版、微信小程序版、支付宝小程序版、百度小程序版、头条小程序7个平台，界面统一，功能一致。
  - cmui仓库为https://github.com/aiplat/cmui.git
  - 代码示例为 https://aiplat.com 的版本
- - uniapp vue2版本为 https://github.com/aiplat/uniapp 的master分支
- - uniapp vue-cli3版本为 https://github.com/aiplat/uniapp/tree/vuecli3 的vuecli3分支
+ 
+ - uniapp vue-cli2版本为 https://github.com/aiplat/uniapp/tree/vuecli2
+ - uniapp vue-cli3 非typescript版本为 https://github.com/aiplat/uniapp/tree/vuecli3
 
  - 基于 https://uniapp.dcloud.io/ 的uni-app
 
