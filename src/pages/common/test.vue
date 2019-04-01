@@ -1,21 +1,21 @@
 <template>
-	<div class="cm_main2">
-		<div class="cm_main cm_pr">
-			<div class="cm_pc_12">
-				<header2 :title="title" v-if="isPlat==='H5'"></header2>
-				<ul class="cm_pc_12" :class="{'cm_mtb4':isPlat==='H5','cm_mb1':isPlat!=='H5'}">
-					<li class="cm_pc_12 cm_mtb1">
-						<image :src="logo" class="cm_wh7 cm_br305 cm_fc"/>
-					</li>
-					<li class="cm_pc_12 cm_mb1 cm_tc" @click="$cm.toWin('',app.url)">
-						{{app.name}}
-					</li>
-					<div class="cm_pc_12 cm_prl05 cm_tc cm_hl3">{{message}}</div>
-				</ul>
-			</div>
-			<copyright2 isCrB="1"></copyright2>
-		</div>
-	</div>
+  <div class="cm_main2">
+    <div class="cm_main cm_pr">
+      <div class="cm_pc_12">
+        <header2 :title="title" v-if="isPlat==='H5'"></header2>
+        <ul class="cm_pc_12" :class="{'cm_mtb4':isPlat==='H5','cm_mb1':isPlat!=='H5'}">
+          <li class="cm_pc_12 cm_mtb1">
+            <image :src="logo" class="cm_wh7 cm_br305 cm_fc"/>
+          </li>
+          <li class="cm_pc_12 cm_mb1 cm_tc" @click="$cm.toWin('',app.url)">
+            {{app.name}}
+          </li>
+          <div class="cm_pc_12 cm_prl05 cm_tc cm_hl3">{{message}}</div>
+        </ul>
+      </div>
+      <copyright2 isCrB="1"></copyright2>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -39,7 +39,7 @@
       header2,
       copyright2,
     },
-    mounted() {
+    onLoad() {
       const t = this;
       t.app = t.$conf;
     },

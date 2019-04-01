@@ -10,7 +10,12 @@
 </template>
 <script>
   export default {
-    props: ['title'],
+    props: {
+      title: {
+        type: String,
+        default: '',
+      },
+    },
     data() {
       return {
         back2: '../../static/aiplat/cm_back.png',
@@ -20,9 +25,6 @@
       routerBack() {
         this.$router.push({ path: '/' });
       },
-    },
-    mounted() {
-      // window.cm.setWXH();
     },
   };
 </script>
