@@ -95,6 +95,9 @@
     "mp-baidu" : {
         "appid" : "https://aiplat.com"
     },
+    "mp-toutiao" : {
+      "appid" : "touristappid"
+    },
     "h5" : {
         "title" : "AI智能空间",
         "domain" : "https://aiplat.com"
