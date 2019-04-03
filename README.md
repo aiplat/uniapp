@@ -4,7 +4,7 @@
  - 一次开发，同时打包成Android版app、iOS版app、H5版、微信小程序版、支付宝小程序版、百度小程序版、头条小程序7个平台，界面统一，功能一致。
  - cmui仓库为https://github.com/aiplat/cmui.git
  - 代码示例为 https://aiplat.com 的版本
- 
+
  - uniapp vue-cli2版本为 https://github.com/aiplat/uniapp/tree/vuecli2
  - uniapp vue-cli3 非typescript版本为 https://github.com/aiplat/uniapp/tree/vuecli3
 
@@ -79,6 +79,9 @@
  - manifest.json  -- uni-app应用的配置文件，用于指定应用的名称、图标、权限等。
  - mpConf.js      -- aiplat配置信息
  - pages.json     -- 用于对 uni-app 进行全局配置，决定页面文件的路径、窗口表现、设置多 tab 等
+ -
+ - 构建APP前先将src/projects/aiplat/manifest.json中appid替换为自己帐号的appid，可以在hbuilderX中新建一个uniapp项目获取到
+ - 构建APP前先执行一次非APP构建模式，使src目录有以上三个文件。
 
  ## 当有其他项目时如miniQQ:
  - 开发命令为npm run dev --apptype=miniQQ

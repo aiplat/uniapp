@@ -5,11 +5,14 @@
 </template>
 <script>
   export default {
-    props: ['title'],
+    props: {
+      title: {
+        type: String,
+        default: '',
+      },
+    },
     data() {
       return {};
     },
-    methods: {},
-    mounted() {},
   };
 </script>

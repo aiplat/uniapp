@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development UNI_PLATFORM=mp-weixin vue-cli-service uni-build --watch",
     "build": "cross-env NODE_ENV=production UNI_PLATFORM=mp-weixin vue-cli-service uni-build",
     "dev-app": "cross-env NODE_ENV=development UNI_PLATFORM=app-plus vue-cli-service uni-build --watch",
-    "dev-h5": "cross-env NODE_ENV=development UNI_PLATFORM=h5 vue-cli-service",
+    "dev-h5": "cross-env NODE_ENV=development UNI_PLATFORM=h5 vue-cli-service uni-serve",
     "dev-alipay": "cross-env NODE_ENV=development UNI_PLATFORM=mp-alipay vue-cli-service uni-build --watch",
     "dev-baidu": "cross-env NODE_ENV=development UNI_PLATFORM=mp-baidu vue-cli-service uni-build --watch",
     "dev-toutiao": "cross-env NODE_ENV=development UNI_PLATFORM=mp-toutiao vue-cli-service uni-build --watch",
@@ -26,7 +26,6 @@
     "@dcloudio/uni-mp-baidu": "*",
     "@dcloudio/uni-mp-toutiao": "*",
     "@dcloudio/uni-mp-weixin": "*",
-    "core-js": "^2.6.5",
     "flyio": "^0.6.2",
     "vue": "^2.6.6",
     "vuex": "^3.0.1"

@@ -11,7 +11,7 @@ const cm = {};
 cm.setLS = (k, v) => {
   uni.setStorageSync(k, v);
 };
-cm.getLS = (k) => uni.getStorageSync(k);
+cm.getLS = k => uni.getStorageSync(k);
 cm.clearLS = (k) => {
   if (k) {
     uni.removeStorageSync(k);

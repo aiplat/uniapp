@@ -1,7 +1,7 @@
 <template>
-	<div class="cm_main2">
-		<web-view :src="webSite" v-if="webSite"></web-view>
-	</div>
+  <div class="cm_main2">
+    <web-view :src="webSite" v-if="webSite"></web-view>
+  </div>
 </template>
 
 <script>
@@ -11,9 +11,6 @@
         webSite: '',
         isPlat: '',
       };
-    },
-    components: {},
-    mounted() {
     },
     onShow() {
       const t = this;

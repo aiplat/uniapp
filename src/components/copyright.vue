@@ -1,7 +1,7 @@
 <template>
-	<div class="cm_pf cm_pc_12 cm_hl3 cm_tc" :class="{'cm_b3e':isCrB!='1','cm_bl0':isCrB=='1'}"  @click="$cm.toWin('',app.url)">
-		&copy;2016 {{app.name}} {{app.site}}
-	</div>
+  <div class="cm_pf cm_pc_12 cm_hl3 cm_tc" :class="{'cm_b3e':isCrB!='1','cm_bl0':isCrB=='1'}" @click="$cm.toWin('',app.url)">
+    &copy;2016 {{app.name}} {{app.site}}
+  </div>
 </template>
 
 <script>
@@ -20,10 +20,7 @@
         },
       };
     },
-    methods: {
-
-    },
-    mounted() {
+    onLoad() {
       const t = this;
       t.app = t.$conf;
     },
