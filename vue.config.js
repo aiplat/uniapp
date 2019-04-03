@@ -1,20 +1,20 @@
 const shell = require('shelljs');
 
 function getNpmType() {
-    const npmType = process.env.npm_config_registry;
-    const confArgv = JSON.parse(process.env.npm_config_argv);
-    let id = 2;
-    if (npmType.indexOf('registry.npm.taobao.org') > -1) {
-        id = 5;
-    } else if (npmType.indexOf('registry.npmjs.org') > -1) {
-        id = 2;
-    } else if (npmType.indexOf('registry.yarnpkg.com') > -1) {
-        id = 2;
-    }
-    if (id > confArgv.original.length - 1) {
-        id = confArgv.original.length - 1;
-    }
-    return id;
+  const npmType = process.env.npm_config_registry;
+  const confArgv = JSON.parse(process.env.npm_config_argv);
+  let id = 2;
+  if (npmType.indexOf('registry.npm.taobao.org') > -1) {
+    id = 5;
+  } else if (npmType.indexOf('registry.npmjs.org') > -1) {
+    id = 2;
+  } else if (npmType.indexOf('registry.yarnpkg.com') > -1) {
+    id = 2;
+  }
+  if (id > confArgv.original.length - 1) {
+    id = confArgv.original.length - 1;
+  }
+  return id;
 }
 
 if (process.env.npm_config_argv) {
@@ -34,7 +34,7 @@ if (process.env.npm_config_argv) {
     'mp-alipay': '支付宝小程序',
     'mp-baidu': '百度小程序',
     'mp-toutiao': '今日头条小程序',
-    'h5': 'H5'
+    'h5': 'H5',
   };
 
   console.log(`------${plat[process.env.UNI_PLATFORM]}平台-->${appType}-${isDev}环境------`);
@@ -47,8 +47,8 @@ if (process.env.npm_config_argv) {
 console.log('------build now------');
 
 module.exports = {
-    lintOnSave: true,
-    css: {
-        modules: true,
-    },
+  lintOnSave: true,
+  css: {
+    modules: true,
+  },
 };
