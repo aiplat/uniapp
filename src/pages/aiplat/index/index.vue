@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-  import header1 from '../../../components/header1';
+  import header1 from '@/components/header1';
 
   export default {
     data() {
