@@ -9,6 +9,7 @@
  - uniapp vue-cli3 非typescript版本为 https://github.com/aiplat/uniapp/tree/vuecli3
 
  - 基于 https://uniapp.dcloud.io/ 的uni-app
+ - 基于本仓库所开发的‘娱乐计分器’已经上线微信、头条、支付宝三大程序，近期开源。
 
 ---
 
