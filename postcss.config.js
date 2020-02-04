@@ -7,4 +7,4 @@ module.exports = {
     }),
     require('@dcloudio/vue-cli-plugin-uni/packages/postcss')
   ]
-}
+};

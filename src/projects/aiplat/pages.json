@@ -1,38 +1,27 @@
 {
   "pages": [
     {
-      "path": "pages/aiplat/index/index",
+      "path": "pages/aiplat/index",
       "style": {
         "navigationBarTitleText": "首页",
         "h5": {
           "titleNView": false
         }
       }
-    }, {
-      "path": "pages/aiplat/apps/index",
+    },
+    {
+      "path": "pages/aiplat/apps",
       "style": {
         "navigationBarTitleText": "应用展示",
         "h5": {
           "titleNView": false
         }
       }
-    }, {
-      "path": "pages/aiplat/donate/index",
+    },
+    {
+      "path": "pages/aiplat/donate",
       "style": {
         "navigationBarTitleText": "捐赠我们",
-        "h5": {
-          "titleNView": false
-        }
-      }
-    }, {
-      "path": "pages/common/h5",
-      "style": {
-        "navigationBarTitleText": "内嵌H5页面"
-      }
-    }, {
-      "path": "pages/common/test",
-      "style": {
-        "navigationBarTitleText": "内页",
         "h5": {
           "titleNView": false
         }
@@ -43,26 +32,30 @@
     "color": "#9b9b9b",
     "selectedColor": "#FD1414",
     "backgroundColor": "#EAEAEA",
-    "list": [{
-      "pagePath": "pages/aiplat/index/index",
-      "text": "首页",
-      "iconPath": "static/img/sy_01.png",
-      "selectedIconPath": "static/img/sy_01on.png"
-    }, {
-      "pagePath": "pages/aiplat/apps/index",
-      "text": "应用展示",
-      "iconPath": "static/img/sy_03.png",
-      "selectedIconPath": "static/img/sy_03on.png"
-    }, {
-      "pagePath": "pages/aiplat/donate/index",
-      "text": "捐赠我们",
-      "iconPath": "static/img/sy_04.png",
-      "selectedIconPath": "static/img/sy_04on.png"
-    }]
+    "list": [
+      {
+        "pagePath": "pages/aiplat/index",
+        "text": "首页",
+        "iconPath": "static/img/sy_01.png",
+        "selectedIconPath": "static/img/sy_01on.png"
+      },
+      {
+        "pagePath": "pages/aiplat/apps",
+        "text": "应用展示",
+        "iconPath": "static/img/sy_03.png",
+        "selectedIconPath": "static/img/sy_03on.png"
+      },
+      {
+        "pagePath": "pages/aiplat/donate",
+        "text": "捐赠我们",
+        "iconPath": "static/img/sy_04.png",
+        "selectedIconPath": "static/img/sy_04on.png"
+      }
+    ]
   },
   "globalStyle": {
     "navigationBarTextStyle": "white",
-    "navigationBarBackgroundColor": "white",
-    "backgroundColor": "white"
+    "navigationBarBackgroundColor": "#000000",
+    "backgroundColor": "#FFFFFF"
   }
 }

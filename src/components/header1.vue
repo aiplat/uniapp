@@ -3,8 +3,9 @@
       <div class="cm_pc_12 cm_hl3 cm_m0 cm_b0 cm_cf cm_tc">{{title}}</div>
   </div>
 </template>
-<script>
-  export default {
+<script lang="ts">
+  import Vue from 'vue';
+  export default Vue.extend({
     props: {
       title: {
         type: String,
@@ -14,5 +15,5 @@
     data() {
       return {};
     },
-  };
+  });
 </script>
