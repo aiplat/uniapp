@@ -48,8 +48,8 @@ async function configArgv() {
   const buildType = argv.original[runId + 1];
   let envType = argv.original[runId + 2];
   envType = isIn(envType, 'env=', 'uat');
-  let appType = argv.original[runId + 3];
-  appType = isIn(appType, 'apptype=', 'aiplat');
+  let project = argv.original[runId + 3];
+  project = isIn(project, 'project=', 'aiplat');
 
   const envTxt = {
     uat: 'UAT',
@@ -65,14 +65,14 @@ async function configArgv() {
   } else {
     platName = 'mp-weixin';
   }
-  console.log(`------${plat[platName]}平台-->${envTxt[envType]}环境-->${isDevTxt}${appType}-------`);
+  console.log(`------${plat[platName]}平台-->${envTxt[envType]}环境-->${isDevTxt}${project}-------`);
   console.log('');
   await addEnvType(envType);
 
   shell.rm('-rf', `./dist/${buildDir}/.sourcemap`);
-  const a = `./src/projects/${appType}/mpConf.ts`;
-  const b = `./src/projects/${appType}/pages.json`;
-  const c = `./src/projects/${appType}/${envType}/manifest.json`;
+  const a = `./src/projects/${project}/mpConf.ts`;
+  const b = `./src/projects/${project}/pages.json`;
+  const c = `./src/projects/${project}/${envType}/manifest.json`;
   shell.cp('-R', a, './src/mpConf.ts');
   shell.cp('-R', b, './src/pages.json');
   shell.cp('-R', c, './src/manifest.json');
