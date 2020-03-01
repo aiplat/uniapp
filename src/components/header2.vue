@@ -8,8 +8,9 @@
       </div>
   </div>
 </template>
-<script>
-  export default {
+<script lang="ts">
+  import Vue from 'vue';
+  export default Vue.extend({
     props: {
       title: {
         type: String,
@@ -23,8 +24,9 @@
     },
     methods: {
       routerBack() {
-        this.$router.push({ path: '/' });
+        const t:any = this;
+        t.$router.push({ path: '/' });
       },
     },
-  };
+  });
 </script>

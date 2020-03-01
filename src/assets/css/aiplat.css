@@ -5,8 +5,8 @@
     *最近修改：2019.01.24
 -----------------------------------------------------------------
 */
-.cm_c1b{background:rgb(253,20,20)!important;}
-.cm_c1c{color:rgb(253,20,20)!important;}/*c1*/
+.cm_c1b{background:#FD1414!important;}
+.cm_c1c{color:#FD1414!important;}/*c1*/
 .cm_c2b{background:rgb(0,0,0)!important;}
 .cm_c2c{color:rgb(0,0,0)!important;}/*c2*/
 .cm_c3b{background:rgb(105,104,103)!important;}
@@ -19,7 +19,24 @@
 .cm_c6c{color:rgb(239,239,238)!important;}/*c6*/
 .cm_c7b{background:rgb(255,255,255)!important;}
 .cm_c7c{color:rgb(255,255,255)!important;}/*c7*/
-.cm_c8b{background:rgb(236,53,58)!important;}
-.cm_c8c{color:rgb(236,53,58)!important;}/*c8*/
-.cm_c9b{background:rgb(255,130,0)!important;}
-.cm_c9c{color:rgb(255,130,0)!important;}/*c9*/
+.cm_c8b{background:#22BF22!important;}
+.cm_c8c{color:#22BF22!important;}/*c8*/
+.cm_c9b{background:#1890FF!important;}
+.cm_c9c{color:#1890FF!important;}/*c9*/
+
+.ulMain{
+  width: 100vw;
+  min-height: 100vh;
+}
+.jifenView{
+  width: 100vw;
+  height: 100vh;
+}
+.jifenTitle{
+  border:1px solid #FD1414;
+  color:#FD1414;
+}
+.jifenTitleAli{
+  border:1px solid #1890FF;
+  color:#1890FF;
+}

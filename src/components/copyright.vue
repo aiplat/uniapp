@@ -1,32 +1,32 @@
 <template>
-  <div class="cm_pf cm_pc_12 cm_hl3 cm_tc" :class="{'cm_b3e':isCrB!='1','cm_bl0':isCrB=='1'}" @click="$cm.toWin('',app.url)">
-    &copy;2016 {{app.name}} {{app.site}}
+  <div class="cm_pf cm_w100 cm_hl3 cm_tc" :class="placeC1" v-if="copyrightData&&copyrightData.copyright">
+    <span :class="c1">{{copyrightData.copyright}} {{copyrightData.name}} {{copyrightData.site}}</span>
   </div>
 </template>
 
-<script>
-  export default {
+<script lang="ts">
+  import Vue from 'vue';
+  export default Vue.extend({
     props: {
-      isCrB: {
+      placeC1: {
         type: String,
-        default: '',
+        default: 'cm_bl0',
+      },
+      c1: {
+        type: String,
+        default: 'cm_c3c',
+      },
+      copyrightData: {
+        type: Object,
+        default() {
+          return {
+            copyright: '',
+            name: '',
+            site: '',
+            placeClass: '',
+          };
+        },
       },
     },
-    data() {
-      return {
-        app: {
-          name: '',
-          site: '',
-        },
-      };
-    },
-    onLoad() {
-      const t = this;
-      t.app = t.$conf;
-    },
-    onShow() {
-      const t = this;
-      t.app = t.$conf;
-    },
-  };
+  });
 </script>

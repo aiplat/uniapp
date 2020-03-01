@@ -1,11 +1,11 @@
 /*
-    Copyright (C) 2014 梁超明 版权所有。 
+    Copyright (C) 2014 梁超明 版权所有。
     文件名：cmstyle.css
     文件功能描述：cmui框架 https://github.com/aiplat/cmui
-    
+
     创 建 人：梁超明 womendi@qq.com
     创建日期：2017.11.11
-    
+
     修 改 人：梁超明 womendi@qq.com
     最近修改：2018.05.19
     修改描述：less打包
@@ -3817,8 +3817,8 @@
   height: 100%;
 }
 .cm_wh100 {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 pre {
   white-space: pre-wrap;
@@ -4195,7 +4195,7 @@ label {
 }
 /*<div class="cm_fl">
      <input type="radio" id="radio-1-1" name="radio-1-set" class="cm_radio" checked /><label for="radio-1-1"></label>
- </div> 
+ </div>
  <div class="cm_fl">
       <input type="radio" id="radio-2-5" name="radio-2-set" class="cm_radio big_radio" /><label for="radio-2-5"></label>
  </div> */
@@ -4250,7 +4250,7 @@ label {
 }
 /*<div class="cm_fl">
      <input type="checkbox" id="checkbox-1-1" class="cm_checkbox" /><label for="checkbox-1-1"></label>
- </div> 
+ </div>
  <div class="cm_fl">
       <input type="checkbox" id="checkbox-2-1" class="cm_checkbox big_checkbox" /><label for="checkbox-2-1"></label>
  </div> */
