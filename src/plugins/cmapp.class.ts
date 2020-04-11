@@ -1064,7 +1064,7 @@ class CmappClass {
   }
   /**
    * 返回到已打开的某个页面
-   * @param url 为要返回到的那个页面的路由地址，如pages/chugui/index
+   * @param url 为要返回到的那个页面的路由地址，如pages/index
    * 如果是要返回到某个页面时并要打开在这个页面才有的入口页面，
    * 则用@param url2, 为返回到url时要再进入的页面
    */
