@@ -1,21 +1,14 @@
 import Vue from 'vue';
-import api from './service/api';
-import conf from './service/conf';
-import Cmapp from './plugins/cmapp.class';
-import uniAjax from './plugins/uniAjax';
-
-// @ts-ignore
-const cmapp = new Cmapp();
+import api from '@/service/api';
+import conf from '@/service/conf';
+import cmappClass from '@/plugins/cmapp.class';
+import uniAjax from '@/plugins/uniAjax';
 
 declare module 'vue/types/vue' {
     interface Vue {
-      // @ts-ignore
       $api: api,
-      // @ts-ignore
       $conf: conf,
-      // @ts-ignore
-      $cmapp: cmapp,
-      // @ts-ignore
+      $cmapp: new cmappClass(),
       $uniAjax: uniAjax,
     }
 }

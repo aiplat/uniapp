@@ -4,7 +4,7 @@ const shell = require('shelljs');
 function addEnvType(envType) {
   let txt = `const a:string = '${envType}';`;
   txt += `export default a;`;
-  const b = 'src/envType.ts';
+  const b = 'src/builds/envType.ts';
   fs.writeFile(b, txt.toString(), (err) => {
     if (err) {
       console.error(err);
@@ -18,11 +18,7 @@ function addEnvType(envType) {
 }
 
 function isIn(v, k, v2) {
-  if (v.indexOf(k) > -1) {
-    v = `${v.split(k)[1]}`;
-  } else {
-    v = v2;
-  }
+  v = v.includes(k) ? `${v.split(k)[1]}` : v2;
   return v;
 }
 
@@ -37,6 +33,7 @@ async function configArgv() {
     'app-plus': 'APP',
     'h5': 'H5',
     'custom': 'custom',
+    'mp-360': '360小程序',
     'mp-alipay': '支付宝小程序',
     'mp-baidu': '百度小程序',
     'mp-qq': 'QQ小程序',
@@ -56,8 +53,8 @@ async function configArgv() {
     ver: 'VER',
     pro: '生产',
   };
-  const buildDir = buildType.indexOf('build') > -1 ? 'build' : 'dev';
-  const isDevTxt = buildType.indexOf('build') > -1 ? '构建' : '开发';
+  const buildDir = buildType.includes('build') ? 'build' : 'dev';
+  const isDevTxt = buildType.includes('build') ? '构建' : '开发';
   console.log('');
   let platName = buildType.split(':');
   if (platName && platName.length > 1) {
@@ -73,7 +70,7 @@ async function configArgv() {
   const a = `./src/projects/${project}/mpConf.ts`;
   const b = `./src/projects/${project}/pages.json`;
   const c = `./src/projects/${project}/${envType}/manifest.json`;
-  shell.cp('-R', a, './src/mpConf.ts');
+  shell.cp('-R', a, './src/builds/mpConf.ts');
   shell.cp('-R', b, './src/pages.json');
   shell.cp('-R', c, './src/manifest.json');
   console.log('');

@@ -1,6 +1,13 @@
-import envType from '../envType';
-import mpConf from '../mpConf';
-import map from './map';
+import envType from '@/builds/envType';
+import mpConf from '@/builds/mpConf';
+
+import setFileObject from '@/service/setFileObject';
+const fileList = require.context(
+  '@/service/config',
+  true,
+  /.ts$/,
+);
+const otherConf = setFileObject(fileList, {});
 
 const project:any = mpConf;
 
@@ -12,10 +19,11 @@ const c:any = {
     github: 'github.com/aiplat',
   },
   version: new Date().valueOf(),
-  map: map,
   project: project,
   plat: process.env.VUE_APP_PLATFORM,
   envType: envType,
+  screenWidth: 750,
+  ...otherConf,
 };
 
 export default c;

@@ -8,7 +8,7 @@
  -----------------------------------------------------------------
  */
 
-class CmappClass {
+class cmappClass {
   public authCallBack:any; // 对应 以下参数 func，当类型function时授权之后返回到上一页执行一次func
   public authType:number; // 对应authTypeObj
   public authTypeObj:Array<any>; // 微信授权
@@ -711,7 +711,7 @@ class CmappClass {
     const cmapp:any = this;
     uni.authorize({
       scope: cmapp.authTypeObj[cmapp.authType].type,
-      success(res) {
+      success(res:any) {
         // data: {scope.userInfo: "ok"} // res.data[cmapp.authTypeObj[cmapp.authType].type] === 'ok'
         // #ifdef MP-TOUTIAO
         if (res.data[cmapp.authTypeObj[cmapp.authType].type] === 'ok') {
@@ -730,7 +730,7 @@ class CmappClass {
           uni.showModal({
             title: cmapp.authTypeObj[cmapp.authType].title,
             content: cmapp.authTypeObj[cmapp.authType].content,
-            success(res) {
+            success(res:any) {
               if (res.confirm) {
                 cmapp.openWxSetting(func, func2);
               } else if (res.cancel) {
@@ -754,7 +754,7 @@ class CmappClass {
   checkWxUserAuth(func:any, func2:any) {
     const cmapp:any = this;
     uni.getSetting({
-      success(res) {
+      success(res:any) {
         const a = res.authSetting[cmapp.authTypeObj[cmapp.authType].type] !== undefined && res.authSetting[cmapp.authTypeObj[cmapp.authType].type] !== true;
         const b = res.authSetting[cmapp.authTypeObj[cmapp.authType].type] === undefined;
         const c = JSON.stringify(res.authSetting) === '{}';
@@ -813,10 +813,10 @@ class CmappClass {
   getLocation(func:any) {
     uni.getLocation({
       type: 'wgs84',
-      success(res2) {
+      success(res:any) {
         const localGeo:any = {
-          longitude: res2.longitude,
-          latitude: res2.latitude,
+          longitude: res.longitude,
+          latitude: res.latitude,
         };
         if (typeof func === 'function') {
           func(2, localGeo);
@@ -1087,4 +1087,4 @@ class CmappClass {
   }
 }
 
-export default CmappClass;
+export default cmappClass;

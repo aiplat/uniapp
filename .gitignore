@@ -5,13 +5,10 @@ test/
 .vs/
 .vscode/
 nbproject/
-unpackage/dist
-/src/envType.ts
+/src/builds
 /src/manifest.json
-/src/mpConf.ts
 /src/pages.json
 .DS_Store
-unpackage/
 
 # local env files
 .env.local

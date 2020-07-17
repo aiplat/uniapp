@@ -117,8 +117,7 @@
     },
     methods: {
       toWin(item:any, type = '') {
-        const t:any = this;
-        t.$cmapp.toWin(item.url, type);
+        this.$cmapp.toWin(item.url, type);
       },
     },
     onShareAppMessage() {
