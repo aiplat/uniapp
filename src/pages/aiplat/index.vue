@@ -18,7 +18,7 @@
               </div>
             </div>
             <ul class="cm_pc_12 cm_pd05 cm_be">
-              <li class="cm_pc_12 cm_pd05 cm_lh2 cm_bf cm_bb1ce" v-for="(v,k) in indexData.gitList" :key="k">
+              <li class="cm_pc_12 cm_pd05 cm_lh2 cm_bf cm_bb1ce" v-for="(v,k) in indexData.gitList" :key="'k1'+k">
                 <div class="cmtou" @click="toWin(v)"><span class="cm_c1c cm_fwb">{{v.name}}</span>:<span
                   class="cm_fs08">{{v.desc}}</span></div>
               </li>
@@ -37,13 +37,8 @@
 </template>
 <script lang="ts">
   import Vue from 'vue';
-
-  import Header1 from '@/components/Header1.vue';
-
   export default Vue.extend({
-    components: {
-      Header1,
-    },
+    components: {},
     data() {
       return {
         title: 'AI智能空间',
@@ -114,24 +109,21 @@
     },
     methods: {
       toWin(item:any, type = '') {
-        const t:any = this;
-        t.$cmapp.toWin(item.url, type);
+        this.$cmapp.toWin(item.url, type);
       },
     },
     onShareAppMessage() {
-      const t:any = this;
-      const url:string = `/pages/${t.$conf.project.type}/index`;
-      const a:any = t.$cmapp.setShareMessage(t, {
+      const url:string = `/pages/${this.$conf.project.type}/index`;
+      const a:any = this.$cmapp.setShareMessage(this, {
         sharePage: url,
         shareIndex: url,
-        shareTitle: `${t.$conf.platform.site}欢迎您`,
+        shareTitle: `${this.$conf.platform.site}欢迎您`,
         shareUrl: '',
       });
       return a;
     },
     onShow() {
-      const t:any = this;
-      t.$cmapp.setNavigationBarColor();
+      this.$cmapp.setNavigationBarColor();
     },
   });
 </script>

@@ -521,8 +521,13 @@ class cmappClass {
    * @param type
    */
   toWin(url:any, type:any) {
-    const w:any = window;
+    // #ifdef APP-PLUS
+    this.setLS('h5url', url);
+    this.jumpTo('/pages/common/h5', '', '');
+    // #endif
+    // #ifndef APP-PLUS
     // #ifdef H5
+    const w:any = window;
     if (type === 'email') {
       w.location = `mailto:${url}`;
       return;
@@ -534,6 +539,7 @@ class cmappClass {
       title: '请打开aiplat.com查看',
       icon: 'none',
     });
+    // #endif
     // #endif
   }
   tsCity(c:string) { // 删除市、区、县 三字
@@ -949,13 +955,12 @@ class cmappClass {
   }
   /**
    * 保存图片到手机
-   * @param t
    * @param isCanvas yes为从canvas保存过去，no为普通保存
    * @param id isCanvas=yes时必填
    * @param filePath isCanvas=no时必填
    * @param func
    */
-  saveImageToPhotosAlbum(t:any, isCanvas = 'no', id:any, filePath:any, func:any) {
+  saveImageToPhotosAlbum(isCanvas = 'no', id:any, filePath:any, func:any) {
     uni.showLoading({ title: '保存中..' });
     let ts:object = {
       title: '保存失败',

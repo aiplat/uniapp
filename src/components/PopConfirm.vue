@@ -54,8 +54,7 @@
     },
     methods: {
       confirmClick(v:any) {
-        const t:any = this;
-        t.$emit('confirmClick2', v);
+        this.$emit('confirmClick2', v);
       },
     },
   });

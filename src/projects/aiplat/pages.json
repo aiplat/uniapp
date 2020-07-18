@@ -26,6 +26,15 @@
           "titleNView": false
         }
       }
+    },
+    {
+      "path": "pages/common/h5",
+      "style": {
+        "navigationBarTitleText": "h5站点",
+        "h5": {
+          "titleNView": false
+        }
+      }
     }
   ],
   "tabBar": {
@@ -57,5 +66,11 @@
     "navigationBarTextStyle": "white",
     "navigationBarBackgroundColor": "#000000",
     "backgroundColor": "#FFFFFF"
+  },
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "(.*)": "@/components/$1.vue"
+    }
   }
 }

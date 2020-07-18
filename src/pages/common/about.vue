@@ -19,17 +19,8 @@
 </template>
 <script lang="ts">
   import Vue from 'vue';
-
-  import Header1 from '@/components/Header1.vue';
-  import NoData from '@/components/NoData.vue';
-  import Copyright from '@/components/Copyright.vue';
-
   export default Vue.extend({
-    components: {
-      Header1,
-      NoData,
-      Copyright,
-    },
+    components: {},
     data() {
       return {
         title: `关于${this.$conf.project.name}`,
@@ -47,22 +38,20 @@
       },
     },
     onShareAppMessage() {
-      const t:any = this;
-      const url:string = `/pages/${t.$conf.project.type}/index`;
-      const a:any = t.$cmapp.setShareMessage(t, {
+      const url:string = `/pages/${this.$conf.project.type}/index`;
+      const a:any = this.$cmapp.setShareMessage(this, {
         sharePage: url,
         shareIndex: url,
-        shareTitle: `${t.$conf.platform.site}欢迎您`,
+        shareTitle: `${this.$conf.platform.site}欢迎您`,
         shareUrl: '',
       });
       return a;
     },
     onShow() {
-      const t:any = this;
-      t.$cmapp.setNavigationBarColor();
-      t.isLoadEnd = 1;
+      this.$cmapp.setNavigationBarColor();
+      this.isLoadEnd = 1;
       uni.setNavigationBarTitle({
-        title: `关于${t.$conf.project.name}`,
+        title: `关于${this.$conf.project.name}`,
       });
     },
   });

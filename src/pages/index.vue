@@ -35,14 +35,8 @@
 <script lang="ts">
   import Vue from 'vue';
 
-  import Header1 from '@/components/Header1.vue';
-  import Copyright from '@/components/Copyright.vue';
-
   export default Vue.extend({
-    components: {
-      Header1,
-      Copyright,
-    },
+    components: {},
     data() {
       return {
         project: this.$conf.project.name,
@@ -127,40 +121,36 @@
         });
       },
       async saveMpUserInfo(u:any) {
-        const t:any = this;
-        await t.$cmapp.saveUserInfo(t, u, () => {
+        await this.$cmapp.saveUserInfo(this, u, () => {
           uni.showToast({
             title: '授权成功',
             icon: 'success',
             duration: 2000,
           });
-          t.$cmapp.authToPage(t, 'yes');
+          this.$cmapp.authToPage(this, 'yes');
         });
       },
       async onWXGetUserInfo(e:any) {
-        const t:any = this;
         if (e.detail.errMsg === 'getUserInfo:ok') {
-          t.saveMpUserInfo(e.detail.userInfo);
+          this.saveMpUserInfo(e.detail.userInfo);
           return;
         }
-        t.unauthorized();
+        this.unauthorized();
       },
     },
     onShareAppMessage() {
-      const t:any = this;
-      const url:string = `/pages/${t.$conf.project.type}/index`;
-      const a:any = t.$cmapp.setShareMessage(t, {
+      const url:string = `/pages/${this.$conf.project.type}/index`;
+      const a:any = this.$cmapp.setShareMessage(this, {
         sharePage: url,
         shareIndex: url,
-        shareTitle: `${t.$conf.platform.site}欢迎您`,
+        shareTitle: `${this.$conf.platform.site}欢迎您`,
         shareUrl: '',
       });
       return a;
     },
     async onLoad(query:any) {
-      const t:any = this;
-      t.$cmapp.setNavigationBarColor();
-      t.$cmapp.noAuthIndex(t, 'yes', query);
+      this.$cmapp.setNavigationBarColor();
+      this.$cmapp.noAuthIndex(this, 'yes', query);
     },
   });
 </script>

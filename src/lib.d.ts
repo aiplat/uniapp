@@ -8,3 +8,4 @@ declare var plus; // h5+
 declare var uni; // uni
 declare var getCurrentPages; // uni
 declare var require; // nodejs
+declare var process; // nodejs

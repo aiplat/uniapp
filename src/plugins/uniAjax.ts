@@ -55,8 +55,8 @@ export default {
         if (isLoading !== 'no') {
           uni.hideLoading();
         }
-        const s = res.data && res.data.res === 0;
-        if (res.statusCode !== 200 || !s) {
+        const isSuccess = res.data && res.data.res === 0;
+        if (res.statusCode !== 200 || !isSuccess) {
           if (isError) {
             const errorTxt:any = {
               title: '网络出错了',
@@ -70,7 +70,7 @@ export default {
           }
         }
         let isSuc:number = 0;
-        if (res.statusCode === 200 && s) {
+        if (res.statusCode === 200 && isSuccess) {
           isSuc = 1;
         }
         if (typeof func === 'function') {
@@ -82,18 +82,5 @@ export default {
       uni.request(conf2);
     });
     return a;
-  },
-  httpAll(arr:any, func:any) {
-    let isSuc:number = 0;
-    return Promise.all(arr).then((res:any) => {
-      isSuc = 1;
-      if (typeof func === 'function') {
-        func(isSuc, res);
-      }
-    }).catch((error:any) => {
-      if (typeof func === 'function') {
-        func(isSuc, error);
-      }
-    });
   },
 };

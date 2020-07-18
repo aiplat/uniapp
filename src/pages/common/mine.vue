@@ -34,17 +34,8 @@
 </template>
 <script lang="ts">
   import Vue from 'vue';
-
-  import Header1 from '@/components/Header1.vue';
-  import List01 from '@/components/List01.vue';
-  import NoData from '@/components/NoData.vue';
-
   export default Vue.extend({
-    components: {
-      Header1,
-      List01,
-      NoData,
-    },
+    components: {},
     data() {
       return {
         isLoadEnd: 0,
@@ -80,24 +71,21 @@
       },
     },
     onShareAppMessage() {
-      const t:any = this;
-      const url:string = `/pages/${t.$conf.project.type}/index`;
-      const a:any = t.$cmapp.setShareMessage(t, {
+      const url:string = `/pages/${this.$conf.project.type}/index`;
+      const a:any = this.$cmapp.setShareMessage(this, {
         sharePage: url,
         shareIndex: url,
-        shareTitle: `${t.$conf.platform.site}欢迎您`,
+        shareTitle: `${this.$conf.platform.site}欢迎您`,
         shareUrl: '',
       });
       return a;
     },
     onLoad(query:any) {
-      const t:any = this;
-      t.$cmapp.noAuthIndex(t, 'yes', query);
+      this.$cmapp.noAuthIndex(this, 'yes', query);
     },
     onShow() {
-      const t:any = this;
-      t.$cmapp.setNavigationBarColor();
-      t.$cmapp.getAuthCallBack();
+      this.$cmapp.setNavigationBarColor();
+      this.$cmapp.getAuthCallBack();
     },
   });
 </script>

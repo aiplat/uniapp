@@ -6,7 +6,7 @@
         <ul class="cm_pc_12 cm_pd05">
           <li class="cm_pc_12 cm_pd05 cm_be">
             <div class="cm_pc_12">
-              <div class="cm_pc_12 cm_lh3 cm_pl05 cm_pr3 cm_br02 cm_bf cm_bb1ce" v-for="(v,k) in findList" :key="k" @click="$cmapp.jumpTo(v.url)">
+              <div class="cm_pc_12 cm_lh3 cm_pl05 cm_pr3 cm_br02 cm_bf cm_bb1ce" v-for="(v,k) in findList" :key="'k1'+k" @click="$cmapp.jumpTo(v.url)">
                 <div class="cmtou" v-if="v.market">{{v.market+'-'+v.name}}</div>
                 <div class="cmtou" v-else>{{k+1}}、{{v.name}}</div>
                 <image class="cm_pa cm_tr0 cm_wh1 cm_bs100 cm_m1" :src="rightImg" background-size="cover"></image>
@@ -20,13 +20,8 @@
 </template>
 <script lang="ts">
   import Vue from 'vue';
-
-  import Header1 from '@/components/Header1.vue';
-
   export default Vue.extend({
-    components: {
-      Header1,
-    },
+    components: {},
     data() {
       return {
         title: '发现',
@@ -49,11 +44,10 @@
     },
     methods: {
       getDemo() {
-        const t:any = this;
-        const nd:any = new Date().valueOf() / 1000;
-        const d:any = t.$cmapp.nowTime(0, '2020-05-20');
-        if (nd > d) {
-          t.findList.push({
+        const nowTime:any = new Date().valueOf() / 1000;
+        const dayTime:any = this.$cmapp.nowTime(0, '2020-05-20');
+        if (nowTime > dayTime) {
+          this.findList.push({
             name: '演示1',
             url: '/pages/good/cmDemo1',
             market: '',
@@ -62,28 +56,25 @@
       },
     },
     onShareAppMessage() {
-      const t:any = this;
-      const url:string = `/pages/${t.$conf.project.type}/index`;
-      const a:any = t.$cmapp.setShareMessage(t, {
+      const url:string = `/pages/${this.$conf.project.type}/index`;
+      const a:any = this.$cmapp.setShareMessage(this, {
         sharePage: url,
         shareIndex: url,
-        shareTitle: `${t.$conf.platform.site}欢迎您`,
+        shareTitle: `${this.$conf.platform.site}欢迎您`,
         shareUrl: '',
       });
       return a;
     },
     onLoad(query:any) {
-      const t:any = this;
-      t.$cmapp.noAuthIndex(t, 'yes', query, () => {
+      this.$cmapp.noAuthIndex(this, 'yes', query, () => {
         // #ifdef MP-WEIXIN
-        t.getDemo();
+        this.getDemo();
         // #endif
       });
     },
     onShow() {
-      const t:any = this;
-      t.$cmapp.setNavigationBarColor();
-      t.$cmapp.getAuthCallBack();
+      this.$cmapp.setNavigationBarColor();
+      this.$cmapp.getAuthCallBack();
     },
   });
 </script>
