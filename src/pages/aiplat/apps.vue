@@ -8,12 +8,12 @@
             <image class="cm_wh7 cm_fc" :src="logo"/>
           </li>
           <li class="cm_pc_12">
-            <ul class="cm_pc_12 cm_prl05" v-for="(item,k2) in indexData" :key="'k2'+k2">
+            <ul class="cm_pc_12 cm_prl05" v-for="(item,k2) in indexData" :key="k2">
               <li class="cm_pc_12">
                 <div class="cm_fl cm_prl05 cm_be cm_hl2 cm_mtb05 cm_br02">{{k2+1}}、{{item.name}}</div>
               </li>
               <li class="cm_pc_12 cm_pd05 cm_tc cm_be">
-                <div class="cm_pc_12 cm_lh3 cm_br02 cm_bf cm_bb1ce" v-for="(v,k) in item.arr" :key="'k1'+k"
+                <div class="cm_pc_12 cm_lh3 cm_br02 cm_bf cm_bb1ce" v-for="(v,k) in item.arr" :key="k"
                      @click="toWin(v)">
                   <div class="cmtou" v-if="v.market">{{v.market+'-'+v.name}}</div>
                   <div class="cmtou" v-else>{{v.name}}</div>

@@ -51,12 +51,12 @@
 # 开发模式
  - npm run dev   (默认微信小程序开发)
  - 打开微信开发者工具->小程序->导入项目->选择dist/dev/mp-weixin
- - 若有多个项目同一个仓库，$ npm run dev --env=uat --project=** 区分
+ - 若有多个项目同一个仓库，$ npm run dev --env=uat --type=** 区分
 
 # 打包项目
  - $ npm run build (默认构建微信小程序)
  - 单个项目（默认aiplat）代码打包到了dist/build/mp-weixin
- - 若有多个项目同一个仓库，$ npm run build --env=uat --project=** 区分
+ - 若有多个项目同一个仓库，$ npm run build --env=uat --type=** 区分
 
 ---
 
@@ -66,14 +66,14 @@
  - dev为开发模式，build为构建模式
  - 这七个平台标识：mp-alipay、mp-baidu、mp-qq、mp-toutiao、app-plus（包含安卓和ios）、h5、mp-weixin(默认)
  - 参数--env=uat为环境参数，默认uat。
- - 参数--project=aiplat为项目名，默认aiplat。
+ - 参数--type=aiplat为项目名，默认aiplat。
  - 例如：
- - npm run dev:baidu --env=uat --project=** 为百度小程序平台->uat环境(测试环境)->开发模式
- - npm run dev:baidu --env=ver --project=** 为百度小程序平台->ver环境(预生产环境)->开发模式
- - npm run dev:baidu --env=pro --project=** 为百度小程序平台->pro环境(生产环境)->开发模式
- - npm run build:baidu --env=uat --project=** 为百度小程序平台->uat环境(测试环境)->构建模式
- - npm run build:baidu --env=ver --project=** 为百度小程序平台->ver环境(预生产环境)->构建模式
- - npm run build:baidu --env=pro --project=** 为百度小程序平台->pro环境(生产环境)->构建模式
+ - npm run dev:baidu --env=uat --type=** 为百度小程序平台->uat环境(测试环境)->开发模式
+ - npm run dev:baidu --env=ver --type=** 为百度小程序平台->ver环境(预生产环境)->开发模式
+ - npm run dev:baidu --env=pro --type=** 为百度小程序平台->pro环境(生产环境)->开发模式
+ - npm run build:baidu --env=uat --type=** 为百度小程序平台->uat环境(测试环境)->构建模式
+ - npm run build:baidu --env=ver --type=** 为百度小程序平台->ver环境(预生产环境)->构建模式
+ - npm run build:baidu --env=pro --type=** 为百度小程序平台->pro环境(生产环境)->构建模式
 
 ---
 
@@ -85,7 +85,7 @@
  - 构建APP前先执行一次dev或build命令，使src目录有以上三个文件。
 
  ## 当有其他项目时如jifenqi(娱乐计分器,后续开源):
- - 开发命令为npm run dev --env=uat --project=jifenqi
- - 构建命令为npm run build --env=uat --project=jifenqi
+ - 开发命令为npm run dev --env=uat --type=jifenqi
+ - 构建命令为npm run build --env=uat --type=jifenqi
 
 ---

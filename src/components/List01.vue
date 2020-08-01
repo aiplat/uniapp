@@ -1,6 +1,6 @@
 <template>
   <ul class="cm_pc_12">
-    <li class="cm_pc_12 cm_hl3 cm_bb1ce" v-for="(v,k) in listData" :key="'k1'+k" @click="listTo(v)">
+    <li class="cm_pc_12 cm_hl3 cm_bb1ce" v-for="(v,k) in listData" :key="k" @click="listTo(v)">
       <image class="cm_pa cm_tl0 cm_wh2 cm_bs100 cm_br1 cm_m05" :src="v.img" v-if="v.img"></image>
       <div class="cm_pc_12 cm_prl3" v-if="v.img">{{k+1}}、{{v.title}}</div>
       <div class="cm_pc_12 cm_pr3 cm_pl05" v-else>{{k+1}}、{{v.title}}</div>

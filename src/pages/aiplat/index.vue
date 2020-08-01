@@ -18,7 +18,7 @@
               </div>
             </div>
             <ul class="cm_pc_12 cm_pd05 cm_be">
-              <li class="cm_pc_12 cm_pd05 cm_lh2 cm_bf cm_bb1ce" v-for="(v,k) in indexData.gitList" :key="'k1'+k">
+              <li class="cm_pc_12 cm_pd05 cm_lh2 cm_bf cm_bb1ce" v-for="(v,k) in indexData.gitList" :key="k">
                 <div class="cmtou" @click="toWin(v)"><span class="cm_c1c cm_fwb">{{v.name}}</span>:<span
                   class="cm_fs08">{{v.desc}}</span></div>
               </li>

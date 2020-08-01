@@ -1,3 +1,10 @@
+/*
+ * @FilePath: \build.config.js
+ * @Description:  
+ * @Author: liangchaoming(womendi@qq.com)
+ * @Date: 2020-07-17 09:17:59
+ * @LastEditTime: 2020-08-01 10:44:40
+ */ 
 const fs = require('fs');
 const shell = require('shelljs');
 
@@ -44,9 +51,9 @@ async function configArgv() {
   let runId = argv.original.indexOf('run');
   const buildType = argv.original[runId + 1];
   let envType = argv.original[runId + 2];
-  envType = isIn(envType, 'env=', 'uat');
-  let project = argv.original[runId + 3];
-  project = isIn(project, 'project=', 'aiplat');
+  envType = envType ? isIn(envType, 'env=', 'uat') : 'uat';
+  let type = argv.original[runId + 3];
+  type = type ? isIn(type, 'type=', 'aiplat') : 'aiplat';
 
   const envTxt = {
     uat: 'UAT',
@@ -62,14 +69,14 @@ async function configArgv() {
   } else {
     platName = 'mp-weixin';
   }
-  console.log(`------${plat[platName]}平台-->${envTxt[envType]}环境-->${isDevTxt}${project}-------`);
+  console.log(`------${plat[platName]}平台-->${envTxt[envType]}环境-->${isDevTxt}${type}-------`);
   console.log('');
   await addEnvType(envType);
 
   shell.rm('-rf', `./dist/${buildDir}/.sourcemap`);
-  const a = `./src/projects/${project}/mpConf.ts`;
-  const b = `./src/projects/${project}/pages.json`;
-  const c = `./src/projects/${project}/${envType}/manifest.json`;
+  const a = `./src/projects/${type}/mpConf.ts`;
+  const b = `./src/projects/${type}/pages.json`;
+  const c = `./src/projects/${type}/${envType}/manifest.json`;
   shell.cp('-R', a, './src/builds/mpConf.ts');
   shell.cp('-R', b, './src/pages.json');
   shell.cp('-R', c, './src/manifest.json');

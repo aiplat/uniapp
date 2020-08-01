@@ -11,6 +11,12 @@ module.exports = {
     requireModuleExtension: true,
   },
   productionSourceMap: false,
+  devServer: {
+    compress: true,
+    port: 2016,
+    hot: true,
+    open: true
+  },
   configureWebpack: cfg => {
     if (process.env.VUE_APP_PLATFORM === 'h5') {
       cfg.performance = {

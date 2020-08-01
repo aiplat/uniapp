@@ -9,12 +9,12 @@
           </li>
           <li class="cm_pc_12 cm_prl05 cm_tc cm_mb05">
             <div class="cm_pc_6 cm_hl2" :class="{'cm_c1b cm_cf':dnid==index,'cm_be':dnid!=index}"
-                 @click="tsDnid(index)" v-for="(v,index) in indexData.dnarr" :key="'k1'+index">
+                 @click="tsDnid(index)" v-for="(v,index) in indexData.dnarr" :key="index">
               <span>{{v.name}}</span>
-              <div class="cm_dn" v-for="(v2,index2) in indexData.dnarr" :key="'k2'+index2">{{v2.name}}</div>
+              <div class="cm_dn" v-for="(v2,index2) in indexData.dnarr" :key="index2">{{v2.name}}</div>
             </div>
           </li>
-          <li class="cm_pc_12 cm_mb05" v-for="(v2,index3) in indexData.dnarr" :key="'k3'+index3">
+          <li class="cm_pc_12 cm_mb05" v-for="(v2,index3) in indexData.dnarr" :key="index3">
             <image class="cm_h17 cm_fc" :src="v2.img" v-if="dnid==index3"/>
           </li>
           <li class="cm_pc_12 cm_prl05 cm_lh1 cm_ti2 cm_mb05">
