@@ -125,6 +125,15 @@
     onShow() {
       this.$cmapp.setNavigationBarColor();
     },
+    mounted() {
+      window &&
+      window.uni &&
+      window.uni.$on("uploadEvent", (responseData: any) => {
+        console.log(responseData);
+        // 在其他app页面调用public/index.html的dispatchEvent方法，html5plus方法查看public/index.html
+        // dispatchEvent('uploadEvent', '数据')
+      });
+    }
   });
 </script>
 <style lang="less" scoped>
