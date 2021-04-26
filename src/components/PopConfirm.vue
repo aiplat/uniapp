@@ -9,14 +9,14 @@
           <li class="cm_pc_12 cm_mtb05 cm_tc cm_z99">
             <div class="cm_pc_6">
               <div class="cm_pc_12 cm_fc4">
-                <div class="cm_dib cm_hl105 cm_prl05 cm_br02 cm_c1b cm_cf" @click="confirmClick('left')">
+                <div class="cm_dib cm_hl105 cm_prl05 cm_br02 cm_c1b cm_cf" @click="confirmEmit('left')">
                   {{confirmData.leftBtn}}
                 </div>
               </div>
             </div>
             <div class="cm_pc_6">
               <div class="cm_pc_12 cm_fc4">
-                <div class="cm_dib cm_hl105 cm_prl05 cm_br02 cm_b0 cm_cf" @click="confirmClick('right')">
+                <div class="cm_dib cm_hl105 cm_prl05 cm_br02 cm_b0 cm_cf" @click="confirmEmit('right')">
                   {{confirmData.rightBtn}}
                 </div>
               </div>
@@ -48,13 +48,11 @@
       },
     },
     data() {
-      return {
-        a: '',
-      };
+      return {};
     },
     methods: {
-      confirmClick(v:any) {
-        this.$emit('confirmClick2', v);
+      confirmEmit(type:any) {
+        this.$emit('confirmEmit', type);
       },
     },
   });

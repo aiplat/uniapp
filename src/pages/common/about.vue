@@ -1,11 +1,11 @@
 <template>
   <div class="cm_main2">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="plat==='h5'"></Header1>
-      <div class="cm_pc_12 ulMain" :class="{'cm_ptb4':plat==='h5','cm_pb1':plat!=='h5'}" v-if="isLoadEnd===1">
+      <Header1 :title="title" v-if="platform==='h5'"></Header1>
+      <div class="cm_pc_12 ulMain" :class="{'cm_ptb4':platform==='h5','cm_pb1':platform!=='h5'}" v-if="isLoadEnd===1">
         <ul class="cm_pc_12">
           <li class="cm_pc_12 cm_mtb05">
-            <image :src="logo" class="cm_wh7 cm_br305 cm_fc"/>
+            <img :src="logo" class="cm_wh7 cm_br305 cm_fc"/>
           </li>
           <li class="cm_pc_12">
             <div class="cm_pc_12 cm_pd05 cm_bf cm_lh105 cm_ti2 cm_mb05">{{description}}</div>
@@ -23,13 +23,13 @@
     components: {},
     data() {
       return {
-        title: `关于${this.$conf.project.name}`,
+        title: `关于${this.$config.project.name}`,
         logo: '../../static/aiplat/icon.png',
-        description: this.$conf.project.description,
-        copyright: `${this.$conf.project.copyright} ${this.$conf.project.email}`,
-        plat: this.$conf.plat,
+        description: this.$config.project.description,
+        copyright: `${this.$config.project.copyright} ${this.$config.project.email}`,
+        platform: this.$config.platform,
         isLoadEnd: 0,
-        copyrightData: this.$conf.project,
+        copyrightData: this.$config.project,
       };
     },
     computed: {
@@ -38,20 +38,19 @@
       },
     },
     onShareAppMessage() {
-      const url:string = `/pages/${this.$conf.project.type}/index`;
-      const a:any = this.$cmapp.setShareMessage(this, {
+      const url:string = `/pages/${this.$config.project.type}/index`;
+      return this.$cmapp.setShareMessage(this, {
         sharePage: url,
         shareIndex: url,
-        shareTitle: `${this.$conf.platform.site}欢迎您`,
+        shareTitle: `${this.$config.site}欢迎您`,
         shareUrl: '',
       });
-      return a;
     },
     onShow() {
       this.$cmapp.setNavigationBarColor();
       this.isLoadEnd = 1;
       uni.setNavigationBarTitle({
-        title: `关于${this.$conf.project.name}`,
+        title: `关于${this.$config.project.name}`,
       });
     },
   });

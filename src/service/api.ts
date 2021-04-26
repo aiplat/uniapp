@@ -1,6 +1,6 @@
-import setFileObject from '@/service/setFileObject';
+import setFileObject from '@/plugins/lib/setFileObject';
 import envType from '@/builds/envType';
-import mpConf from '@/builds/mpConf';
+import selfConfig from '@/builds/selfConfig';
 
 const fileList = require.context(
   '@/service/apis',
@@ -8,10 +8,12 @@ const fileList = require.context(
   /.ts$/,
 );
 
+const config:any = selfConfig;
+
 // 接口域名
 let server:string = 'https://aiplat.com';
-if (mpConf && mpConf.server && mpConf.server[envType]) {
-  server = mpConf.server[envType];
+if (config && config.server && config.server[envType]) {
+  server = config.server[envType];
 }
 const api:any = {
   server: server,

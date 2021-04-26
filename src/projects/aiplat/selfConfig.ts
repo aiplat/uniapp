@@ -1,7 +1,8 @@
 /**
  * AI智能空间配置
  */
-const pf:any = {
+
+export default {
   name: 'AI智能空间',
   type: 'aiplat',
   version: '1.1.1',
@@ -17,5 +18,3 @@ const pf:any = {
     pro: 'https://aiplat.com', // 生产环境接口域名
   },
 };
-
-export default pf;

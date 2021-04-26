@@ -22,10 +22,10 @@
         return this.$store.getters.getHybridAppData;
       },
       project() {
-        return this.$conf.project;
+        return this.$config.project;
       },
       version() {
-        return this.$conf.version;
+        return this.$config.version;
       },
     },
     methods: {
@@ -36,7 +36,7 @@
         console.log('h5 load...error');
       },
       async setWebSite() {
-        this.webSite = this.$cmapp.getLS('h5url');
+        this.webSite = this.$cmapp.getStorage('h5url');
         this.isLoadEnd = 1;
         this.$forceUpdate();
       },

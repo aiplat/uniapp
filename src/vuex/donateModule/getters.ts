@@ -1,5 +1,5 @@
 export default {
-  getDnid(state:any) {
-    return state.dnid;
+  getDonateId(state:any) {
+    return state.donateId;
   },
 };

@@ -1,15 +1,15 @@
 <template>
   <div class="cm_main2">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="plat==='h5'"></Header1>
-      <div class="cm_pc_12" :class="{'cm_mtb4':plat==='h5','cm_mb1':plat!=='h5'}">
+      <Header1 :title="title" v-if="platform==='h5'"></Header1>
+      <div class="cm_pc_12" :class="{'cm_mtb4':platform==='h5','cm_mb1':platform!=='h5'}">
         <ul class="cm_pc_12 cm_pd05">
           <li class="cm_pc_12 cm_pd05 cm_be">
             <div class="cm_pc_12">
-              <div class="cm_pc_12 cm_lh3 cm_pl05 cm_pr3 cm_br02 cm_bf cm_bb1ce" v-for="(v,k) in findList" :key="k" @click="$cmapp.jumpTo(v.url)">
-                <div class="cmtou" v-if="v.market">{{v.market+'-'+v.name}}</div>
-                <div class="cmtou" v-else>{{k+1}}、{{v.name}}</div>
-                <image class="cm_pa cm_tr0 cm_wh1 cm_bs100 cm_m1" :src="rightImg" background-size="cover"></image>
+              <div class="cm_pc_12 cm_lh3 cm_pl05 cm_pr3 cm_br02 cm_bf cm_bb1ce" v-for="(item1,index1) in findList" :key="index1" @click="$cmapp.jumpTo(item1.url)">
+                <div class="cmtou" v-if="item1.market">{{item1.market+'-'+item1.name}}</div>
+                <div class="cmtou" v-else>{{index1+1}}、{{item1.name}}</div>
+                <img class="cm_pa cm_tr0 cm_wh1 cm_bs100 cm_m1" :src="rightImg" background-size="cover"/>
               </div>
             </div>
           </li>
@@ -26,7 +26,7 @@
       return {
         title: '发现',
         logo: '../../static/logo.png',
-        plat: this.$conf.plat,
+        platform: this.$config.platform,
         findList: [
           {
             name: '应用展示',
@@ -45,7 +45,7 @@
     methods: {
       getDemo() {
         const nowTime:any = new Date().valueOf() / 1000;
-        const dayTime:any = this.$cmapp.nowTime(0, '2020-05-20');
+        const dayTime:any = this.$cmapp.nowTime(0, '2022-05-20');
         if (nowTime > dayTime) {
           this.findList.push({
             name: '演示1',
@@ -56,14 +56,13 @@
       },
     },
     onShareAppMessage() {
-      const url:string = `/pages/${this.$conf.project.type}/index`;
-      const a:any = this.$cmapp.setShareMessage(this, {
+      const url:string = `/pages/${this.$config.project.type}/index`;
+      return this.$cmapp.setShareMessage(this, {
         sharePage: url,
         shareIndex: url,
-        shareTitle: `${this.$conf.platform.site}欢迎您`,
+        shareTitle: `${this.$config.site}欢迎您`,
         shareUrl: '',
       });
-      return a;
     },
     onLoad(query:any) {
       this.$cmapp.noAuthIndex(this, 'yes', query, () => {

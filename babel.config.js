@@ -18,7 +18,7 @@ if (
 
   const isWin = /^win/.test(process.platform)
 
-  const normalizePath = path => (isWin ? path.replace(/\\/g, '/') : path)
+  const normalizePath = path => (isWin ? path.replace(/\\/g, '/') :path)
 
   const input = normalizePath(process.env.UNI_INPUT_DIR)
   try {
@@ -42,20 +42,20 @@ process.UNI_LIBRARIES.forEach(libraryName => {
   plugins.push([
     'import',
     {
-      'libraryName': libraryName,
-      'customName': (name) => {
+      'libraryName':libraryName,
+      'customName':(name) => {
         return `${libraryName}/lib/${name}/${name}`
       }
     }
   ])
 })
 module.exports = {
-  presets: [
+  presets:[
     [
       '@vue/app',
       {
-        modules: 'commonjs',
-        useBuiltIns: process.env.UNI_PLATFORM === 'h5' ? 'usage' : 'entry'
+        modules:'commonjs',
+        useBuiltIns:process.env.UNI_PLATFORM === 'h5' ? 'usage' :'entry'
       }
     ]
   ],

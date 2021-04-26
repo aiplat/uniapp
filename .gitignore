@@ -5,6 +5,7 @@ test/
 .vs/
 .vscode/
 nbproject/
+.history/
 /src/builds
 /src/manifest.json
 /src/pages.json
@@ -28,3 +29,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+yarn.lock
+package-lock.json

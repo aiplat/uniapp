@@ -1,1 +1,1 @@
-export const SETDNID = 'SETDNID';
+export const SETDONATEID = 'SETDONATEID';

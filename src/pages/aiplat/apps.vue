@@ -1,22 +1,22 @@
 <template>
   <div class="cm_main2">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="plat==='h5'"></Header1>
-      <div class="cm_pc_12" :class="{'cm_mtb4':plat==='h5','cm_mb1':plat!=='h5'}">
+      <Header1 :title="title" v-if="platform==='h5'"></Header1>
+      <div class="cm_pc_12" :class="{'cm_mtb4':platform==='h5','cm_mb1':platform!=='h5'}">
         <ul class="cm_pc_12">
           <li class="cm_pc_12 cm_mt05">
-            <image class="cm_wh7 cm_fc" :src="logo"/>
+            <img class="cm_wh7 cm_fc" :src="logo"/>
           </li>
           <li class="cm_pc_12">
-            <ul class="cm_pc_12 cm_prl05" v-for="(item,k2) in indexData" :key="k2">
+            <ul class="cm_pc_12 cm_prl05" v-for="(item1,index1) in indexData" :key="index1">
               <li class="cm_pc_12">
-                <div class="cm_fl cm_prl05 cm_be cm_hl2 cm_mtb05 cm_br02">{{k2+1}}、{{item.name}}</div>
+                <div class="cm_fl cm_prl05 cm_be cm_hl2 cm_mtb05 cm_br02">{{index1+1}}、{{item1.name}}</div>
               </li>
               <li class="cm_pc_12 cm_pd05 cm_tc cm_be">
-                <div class="cm_pc_12 cm_lh3 cm_br02 cm_bf cm_bb1ce" v-for="(v,k) in item.arr" :key="k"
-                     @click="toWin(v)">
-                  <div class="cmtou" v-if="v.market">{{v.market+'-'+v.name}}</div>
-                  <div class="cmtou" v-else>{{v.name}}</div>
+                <div class="cm_pc_12 cm_lh3 cm_br02 cm_bf cm_bb1ce" v-for="(item2,index2) in item1.arr" :key="index2"
+                     @click="goToWindow(item2.url)">
+                  <div class="cmtou" v-if="item2.market">{{item2.market+'-'+item2.name}}</div>
+                  <div class="cmtou" v-else>{{item2.name}}</div>
                 </div>
               </li>
             </ul>
@@ -102,7 +102,7 @@
             ],
           },
         ],
-        plat: this.$conf.plat,
+        platform: this.$config.platform,
       };
     },
     computed: {
@@ -111,19 +111,18 @@
       },
     },
     methods: {
-      toWin(item:any, type = '') {
-        this.$cmapp.toWin(item.url, type);
+      goToWindow(url:any, type = '') {
+        this.$cmapp.goToWindow(url, type);
       },
     },
     onShareAppMessage() {
-      const url:string = `/pages/${this.$conf.project.type}/index`;
-      const a:any = this.$cmapp.setShareMessage(this, {
+      const url:string = `/pages/${this.$config.project.type}/index`;
+      return this.$cmapp.setShareMessage(this, {
         sharePage: url,
         shareIndex: url,
-        shareTitle: `${this.$conf.platform.site}欢迎您`,
+        shareTitle: `${this.$config.site}欢迎您`,
         shareUrl: '',
       });
-      return a;
     },
     onShow() {
       this.$cmapp.setNavigationBarColor();

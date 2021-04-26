@@ -1,11 +1,11 @@
 <template>
   <div class="cm_main2">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="plat==='h5'"></Header1>
-      <div class="cm_pc_12 ulMain" :class="{'cm_ptb4':plat==='h5','cm_pb1':plat!=='h5'}">
+      <Header1 :title="title" v-if="platform==='h5'"></Header1>
+      <div class="cm_pc_12 ulMain" :class="{'cm_ptb4':platform==='h5','cm_pb1':platform!=='h5'}">
         <ul class="cm_pc_12 cm_prl1">
           <li class="cm_pc_12 cm_mtb1">
-            <image :src="logo" class="cm_wh7 cm_br305 cm_fc"/>
+            <img :src="logo" class="cm_wh7 cm_br305 cm_fc"/>
           </li>
           <li class="cm_pc_12 cm_tc cm_bb1ce cm_pb1 cm_mb1">
             {{title}}
@@ -16,14 +16,14 @@
           <li class="cm_pc_12 cm_tc cm_mb1">
             <span class="cm_c4c">• {{project}}旗下应用将获得您的公开信息（昵称、头像、签名等）</span>
           </li>
-          <li class="cm_pc_12 cm_tc" v-if="plat==='mp-toutiao'">
+          <li class="cm_pc_12 cm_tc" v-if="platform==='mp-toutiao'">
             <button class="cm_pc_12 cm_hl205 cm_c8b cm_cf cm_fs09" @tap="onTtGetUserInfo" ><span>授权</span></button>
           </li>
-          <li class="cm_pc_12 cm_tc" v-if="plat==='mp-weixin'">
+          <li class="cm_pc_12 cm_tc" v-if="platform==='mp-weixin'">
             <button class="cm_pc_12 cm_hl205 cm_c8b cm_cf cm_fs09" open-type="getUserInfo" lang="zh_CN"
                     @getuserinfo="onWXGetUserInfo" ><span>授权</span></button>
           </li>
-          <li class="cm_pc_12 cm_tc" v-if="plat==='mp-alipay'">
+          <li class="cm_pc_12 cm_tc" v-if="platform==='mp-alipay'">
             <button class="cm_pc_12 cm_hl205 cm_c9b cm_cf cm_fs09" lang="zh_CN" open-type="getAuthorize" @getAuthorize="onALIGetAuthorize" scope="userInfo"><span>授权</span></button>
           </li>
         </ul>
@@ -39,14 +39,14 @@
     components: {},
     data() {
       return {
-        project: this.$conf.project.name,
-        title: this.$conf.project.name,
+        project: this.$config.project.name,
+        title: this.$config.project.name,
         logo: '../static/logo.png',
-        description: this.$conf.project.description,
-        copyright: `${this.$conf.project.copyright} ${this.$conf.project.email}`,
+        description: this.$config.project.description,
+        copyright: `${this.$config.project.copyright} ${this.$config.project.email}`,
         navigateType: 'redirectTo',
-        copyrightData: this.$conf.project,
-        plat: this.$conf.plat,
+        copyrightData: this.$config.project,
+        platform: this.$config.platform,
       };
     },
     computed: {
@@ -57,46 +57,46 @@
     methods: {
       onTtGetUserInfo() {
         // 获取头条用户信息
-        const t:any = this;
+        const $vue:any = this;
         const getInfo:any = () => {
           uni.getUserInfo({
             success(res:any) {
               if (res.errMsg === 'getUserInfo:ok') {
-                t.saveMpUserInfo(res.userInfo);
+                $vue.saveMpUserInfo(res.userInfo);
                 return;
               }
-              t.unauthorized();
+              $vue.unauthorized();
             },
             fail() {
-              t.unauthorized();
+              $vue.unauthorized();
             },
           });
         };
-        const isAuth:any = t.$cmapp.getLS('isAuth');
+        const isAuth:any = $vue.$cmapp.getStorage('isAuth');
         if (isAuth && isAuth === 'yes') {
           getInfo();
         } else {
-          t.$cmapp.authType = 3;
-          t.$cmapp.checkWxUserAuth((authId:any) => {
+          $vue.$cmapp.authType = 3;
+          $vue.$cmapp.checkWxUserAuth((authId:any) => {
             if (authId === 0) {
               console.log('已授权');
-              t.$cmapp.setLS('isAuth', 'yes');
+              $vue.$cmapp.setStorage('isAuth', 'yes');
               getInfo();
             }
           }, () => {
             console.log('未授权');
-            t.$cmapp.clearLS('isAuth');
+            $vue.$cmapp.clearLS('isAuth');
           });
         }
       },
       // 获取支付宝用户信息
       onALIGetAuthorize() {
-        const t:any = this;
+        const $vue:any = this;
         // @ts-ignore
         my.getOpenUserInfo({
           success: (res:any) => {
             const aliInfo:any = JSON.parse(res.response).response;
-            const u:object = {
+            const userInfo:object = {
               openid: `alipay${new Date().valueOf()}`,
               nickName: aliInfo.nickName,
               avatarUrl: aliInfo.avatar,
@@ -106,10 +106,10 @@
               country: aliInfo.countryCode,
               language: aliInfo.countryCode,
             };
-            t.saveMpUserInfo(u);
+            $vue.saveMpUserInfo(userInfo);
           },
           fail: () => {
-            t.unauthorized();
+            $vue.unauthorized();
           },
         });
       },
@@ -120,8 +120,8 @@
           duration: 2000,
         });
       },
-      async saveMpUserInfo(u:any) {
-        await this.$cmapp.saveUserInfo(this, u, () => {
+      async saveMpUserInfo(userInfo:any) {
+        await this.$cmapp.saveUserInfo(this, userInfo, () => {
           uni.showToast({
             title: '授权成功',
             icon: 'success',
@@ -130,23 +130,22 @@
           this.$cmapp.authToPage(this, 'yes');
         });
       },
-      async onWXGetUserInfo(e:any) {
-        if (e.detail.errMsg === 'getUserInfo:ok') {
-          this.saveMpUserInfo(e.detail.userInfo);
+      async onWXGetUserInfo(event:any) {
+        if (event.detail.errMsg === 'getUserInfo:ok') {
+          this.saveMpUserInfo(event.detail.userInfo);
           return;
         }
         this.unauthorized();
       },
     },
     onShareAppMessage() {
-      const url:string = `/pages/${this.$conf.project.type}/index`;
-      const a:any = this.$cmapp.setShareMessage(this, {
+      const url:string = `/pages/${this.$config.project.type}/index`;
+      return this.$cmapp.setShareMessage(this, {
         sharePage: url,
         shareIndex: url,
-        shareTitle: `${this.$conf.platform.site}欢迎您`,
+        shareTitle: `${this.$config.site}欢迎您`,
         shareUrl: '',
       });
-      return a;
     },
     async onLoad(query:any) {
       this.$cmapp.setNavigationBarColor();

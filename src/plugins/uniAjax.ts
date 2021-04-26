@@ -26,37 +26,36 @@ export default {
   },
   isLoading: true,
   http(url:string, data:any, options:any, func:any, isLoading:any, isError:any) {
-    const t:any = this;
     if (!options) {
       options = {};
     }
-    options.baseURL = options.baseURL || t.baseURL;
+    options.baseURL = options.baseURL || this.baseURL;
     options.url = options.baseURL + url;
     if ((options.method === 'POST' || options.method === 'post') && (options.header === undefined || !options.header)) {
       options.header = {
         'Content-Type': 'application/x-www-form-urlencoded',
       };
     }
-    options.header = options.header || t.config.header;
-    options.method = options.method || t.config.method;
+    options.header = options.header || this.config.header;
+    options.method = options.method || this.config.method;
     options.data = data || {};
-    options.dataType = options.dataType || t.config.dataType;
+    options.dataType = options.dataType || this.config.dataType;
     // options.responseType = options.responseType || t.config.responseType;
     // #ifndef MP-WEIXIN
     // delete options.responseType; // （h5+和支付宝）不支持并且会报错
     // #endif
-    const ts:any = isLoading && isLoading !== 'no' ? isLoading : '数据加载中..';
+    const loadingTitle:any = isLoading && isLoading !== 'no' ? isLoading : '数据加载中..';
     if (isLoading !== 'no') {
-      uni.showLoading({ title: ts });
+      uni.showLoading({ title: loadingTitle });
     }
-    const a:any = new Promise((resolve:any) => {
-      let conf2:any = null;
-      options.complete = (res:any) => {
+    return new Promise((resolve:any) => {
+      let requestConfig:any = null;
+      options.complete = (responseData:any) => {
         if (isLoading !== 'no') {
           uni.hideLoading();
         }
-        const isSuccess = res.data && res.data.res === 0;
-        if (res.statusCode !== 200 || !isSuccess) {
+        const isSuccess = responseData.statusCode === 200 && responseData.data && responseData.data.res === 0;
+        if (responseData.statusCode !== 200 || !isSuccess) {
           if (isError) {
             const errorTxt:any = {
               title: '网络出错了',
@@ -69,18 +68,13 @@ export default {
             uni.showToast(errorTxt);
           }
         }
-        let isSuc:number = 0;
-        if (res.statusCode === 200 && isSuccess) {
-          isSuc = 1;
-        }
-        if (typeof func === 'function') {
-          func(isSuc, res);
-        }
-        resolve(res);
+        resolve({
+          isSuccess,
+          ...responseData,
+        });
       };
-      conf2 = Object.assign({}, t.config, options);
-      uni.request(conf2);
+      requestConfig = Object.assign({}, this.config, options);
+      uni.request(requestConfig);
     });
-    return a;
   },
 };

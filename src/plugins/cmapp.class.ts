@@ -35,10 +35,10 @@ class cmappClass {
       },
     ];
   }
-  setLS(k:string, v:any) {
+  setStorage(k:string, v:any) {
     uni.setStorageSync(k, v);
   }
-  getLS(k:string) {
+  getStorage(k:string) {
     return uni.getStorageSync(k) || '';
   }
   clearLS(k: string) {
@@ -51,8 +51,8 @@ class cmappClass {
   updateLS(k:string, timeKey:string, s:number, func:any) { // k值的timeKey超过s分钟为过期，过期(id=0)则清除k值
     const cmapp:any = this;
     const nd:any = new Date().valueOf();
-    const kid:any = cmapp.getLS(k);
-    const time:any = cmapp.getLS(timeKey);
+    const kid:any = cmapp.getStorage(k);
+    const time:any = cmapp.getStorage(timeKey);
     let id:number = 1;
     if (kid && time && nd - time >= 1000 * 60 * s) {
       cmapp.clearLS(k);
@@ -160,10 +160,10 @@ class cmappClass {
   openMiniProgram(t:any, appId:string, path = '', userInfo:any, func:any) {
     const cmapp:any = this;
     cmapp.isToAuth('auth', '', 'navigateBack', () => {
-      if (cmapp.getLS('isOpenMp')) {
+      if (cmapp.getStorage('isOpenMp')) {
         return;
       }
-      cmapp.setLS('isOpenMp', 'yes');
+      cmapp.setStorage('isOpenMp', 'yes');
       uni.navigateToMiniProgram({
         appId: appId,
         path: path,
@@ -212,7 +212,7 @@ class cmappClass {
    */
   isToAuth(page:any, navigateType:any, func:any) {
     const cmapp:any = this;
-    const wxinfo = cmapp.getLS('userInfo');
+    const wxinfo = cmapp.getStorage('userInfo');
     const nb = 'navigateBack';
     let nt = navigateType;
     if (wxinfo && wxinfo.openid) {
@@ -239,7 +239,7 @@ class cmappClass {
    */
   getAuthCallBack() {
     const cmapp:any = this;
-    const isCallBack:any = cmapp.getLS('isCallBack');
+    const isCallBack:any = cmapp.getStorage('isCallBack');
     if (typeof cmapp.authCallBack === 'function' && isCallBack && isCallBack === 'yes') {
       cmapp.authCallBack();
       cmapp.authCallBack = '';
@@ -252,22 +252,20 @@ class cmappClass {
   /**
    小程序登录获取code
    */
-  getCode(t:any, func:any) {
-    let c:any = null;
-    uni.login({
-      success: async (res:any) => {
-        if (res.code) {
-          c = res.code;
-        }
-        if (typeof func === 'function') {
-          func(c);
-        }
-      },
-      fail: async () => {
-        if (typeof func === 'function') {
-          func(c);
-        }
-      },
+  getCode() {
+    let code:any = null;
+    return new Promise((resolve, reject) => {
+      uni.login({
+        success: async (res:any) => {
+          if (res.code) {
+            code = res.code;
+          }
+          resolve(code);
+        },
+        fail: async () => {
+          reject(code);
+        },
+      });
     });
   }
   /**
@@ -279,8 +277,8 @@ class cmappClass {
    */
   async checkLogin(key:any, func1:any, func2:any) {
     const cmapp:any = this;
-    const k = cmapp.getLS(key);
-    if (k) {
+    const storageValue = cmapp.getStorage(key);
+    if (storageValue) {
       await func1();
     } else {
       await func2();
@@ -293,25 +291,20 @@ class cmappClass {
    * @param func
    * @returns {Promise<void>}
    */
-  getOpenid(t:any, code:any, func:any) {
+  async getOpenid($vue:any, code:any) {
     const cmapp:any = this;
-    t.$uniAjax.http(t.$api.sign.getUserId, {
-      apptype: t.$conf.project.type,
-      plat: t.$conf.plat,
-      code: code,
-    }, {
-      method: 'POST',
-    }, (isSuc:number, res:any) => {
-      let d = null;
-      if (isSuc && res.data && res.data.list && res.data.list.openid) {
-        d = res.data.list.openid;
-        cmapp.setLS('openid', d);
-      } else {
-        cmapp.clearLS('openid');
-      }
-      if (typeof func === 'function') {
-        func(d);
-      }
+    return new Promise(async (resolve) => {
+      const responseData = await $vue.$uniAjax.http($vue.$api.sign.getUserId, {
+        apptype: $vue.$config.project.type,
+        plat: $vue.$config.platform,
+        code: code,
+      }, {
+        method: 'POST',
+      });
+      const openid = responseData.isSuccess && responseData.data && responseData.data.list && responseData.data.list.openid || null;
+      openid && cmapp.setStorage('openid', openid);
+      !openid && cmapp.clearLS('openid');
+      resolve(openid);
     });
   }
   /**
@@ -323,14 +316,14 @@ class cmappClass {
    */
   saveUserInfo(t:any, info:any, func:any) {
     const cmapp:any = this;
-    info.plat = t.$conf.plat;
-    info.apptype = t.$conf.project.type;
-    info.openid = info.openid ? info.openid : t.$cmapp.getLS('openid');
+    info.platform = t.$config.platform;
+    info.apptype = t.$config.project.type;
+    info.openid = info.openid ? info.openid : t.$cmapp.getStorage('openid');
     t.$uniAjax.http(t.$api.sign.saveUserInfo, info, {
       method: 'POST',
     }, (isSuc:number, res:any) => {
       t.$store.dispatch('setUserInfo', info);
-      cmapp.setLS('userInfo', info);
+      cmapp.setStorage('userInfo', info);
       let d:any = null;
       if (isSuc) {
         d = res.data;
@@ -347,13 +340,13 @@ class cmappClass {
    */
   authToPage(t:any, isTs = 'no', time:any) {
     const cmapp:any = this;
-    let url = `/pages/${t.$conf.project.type}/index`;
-    const shareUrl = cmapp.getLS('shareUrl');
+    let url = `/pages/${t.$config.project.type}/index`;
+    const shareUrl = cmapp.getStorage('shareUrl');
     if (shareUrl) {
       url = decodeURIComponent(shareUrl);
     }
     if (t.navigateType === 'navigateBack') {
-      cmapp.setLS('isCallBack', 'yes');
+      cmapp.setStorage('isCallBack', 'yes');
     }
     if (isTs === 'no') {
       cmapp.jumpTo(url, t.navigateType);
@@ -376,7 +369,7 @@ class cmappClass {
   getUrlParams(t:any, query:any, k:any) {
     const cmapp:any = this;
     if (query && query[k]) {
-      cmapp.setLS(k, decodeURIComponent(query[k]));
+      cmapp.setStorage(k, decodeURIComponent(query[k]));
     } else {
       cmapp.clearLS(k);
     }
@@ -402,8 +395,8 @@ class cmappClass {
     const d = async () => {
       uni.hideLoading();
       t.isLoadEnd = 1;
-      let shareUrl:any = cmapp.getLS('shareUrl');
-      const userInfo:any = cmapp.getLS('userInfo');
+      let shareUrl:any = cmapp.getStorage('shareUrl');
+      const userInfo:any = cmapp.getStorage('userInfo');
       if (userInfo) {
         t.$store.dispatch('setUserInfo', userInfo);
         await t.$cmapp.saveUserInfo(t, userInfo);
@@ -429,8 +422,8 @@ class cmappClass {
     cmapp.checkLogin('openid', () => {
       d();
     }, async () => {
-      await cmapp.getCode(t, async (code:any) => {
-        cmapp.getOpenid(t, code, () => {
+      cmapp.getCode().then((code:any) => {
+        cmapp.getOpenid(t, code).then(() => {
           d();
         });
       });
@@ -452,7 +445,7 @@ class cmappClass {
    * @param t
    * @param d d参数如下4个：
    * @param sharePage 已授权后打开的路由
-   * @param shareIndex 未授权时打开的页面，默认/pages/${t.$conf.project.dir}/index
+   * @param shareIndex 未授权时打开的页面，默认/pages/${t.$config.project.dir}/index
    * @param shareTitle 分享标题
    * @param shareUrl 打开sharePage或shareIndex之后再打开的shareUrl，默认不打开
    * @returns {{path: (*|string), title: (string|*)}}
@@ -460,21 +453,21 @@ class cmappClass {
   setShareMessage(t:any, d:any) {
     const cmapp:any = this;
     let path = d.sharePage;
-    const userInfo = cmapp.getLS('userInfo');
+    const userInfo = cmapp.getStorage('userInfo');
     if (!userInfo) {
-      path = d.shareIndex ? `${d.shareIndex}` : `/pages/${t.$conf.project.dir}/index`;
+      path = d.shareIndex ? `${d.shareIndex}` : `/pages/${t.$config.project.dir}/index`;
     }
     if (path.indexOf('?') > -1) {
       path += '&';
     } else {
       path += '?';
     }
-    path += `shareId=${cmapp.getLS('openid') ? cmapp.getLS('openid') : ''}`;
-    path += `&scene=${cmapp.getLS('scene') ? cmapp.getLS('scene') : ''}`;
+    path += `shareId=${cmapp.getStorage('openid') ? cmapp.getStorage('openid') : ''}`;
+    path += `&scene=${cmapp.getStorage('scene') ? cmapp.getStorage('scene') : ''}`;
     if (d.shareUrl) {
       path += `&shareUrl=${encodeURIComponent(d.shareUrl)}`;
     }
-    const title = d.shareTitle ? `${d.shareTitle}` : t.$conf.project.name;
+    const title = d.shareTitle ? `${d.shareTitle}` : t.$config.project.name;
     return {
       title: title,
       path: path,
@@ -520,9 +513,9 @@ class cmappClass {
    * @param url
    * @param type
    */
-  toWin(url:any, type:any) {
+  goToWindow(url:any, type:any) {
     // #ifdef APP-PLUS
-    this.setLS('h5url', url);
+    this.setStorage('h5url', url);
     this.jumpTo('/pages/common/h5', '', '');
     // #endif
     // #ifndef APP-PLUS
@@ -780,16 +773,16 @@ class cmappClass {
   }
   getWebGeo(t:any, localGeo:any, func:any) {// 经纬度转为地址信息
     const cmapp:any = this;
-    const keyId:any = Math.round(Math.random() * (t.$conf.map.keys.length - 1));
+    const keyId:any = Math.round(Math.random() * (t.$config.map.keys.length - 1));
     const d:object = {
       location: `${localGeo.latitude},${localGeo.longitude}`,
-      ak: t.$conf.map.keys[keyId],
+      ak: t.$config.map.keys[keyId],
       output: 'json',
       coordtype: 'gcj02ll',
       latest_admin: 1,
     };
     uni.request({
-      url: t.$conf.map.host + t.$conf.map.apis.geocoder,
+      url: t.$config.map.host + t.$config.map.apis.geocoder,
       data: d,
       method: 'GET',
       header: {
@@ -802,7 +795,7 @@ class cmappClass {
           lg.cityName = cmapp.tsCity(lg.city);
           lg.lng = localGeo.longitude;
           lg.lat = localGeo.latitude;
-          cmapp.setLS('localGeo', lg);
+          cmapp.setStorage('localGeo', lg);
         }
         if (typeof func === 'function') {
           func();
@@ -869,7 +862,7 @@ class cmappClass {
           func3();
         });
       } else {
-        const localGeo:any = cmapp.getLS('localGeo');
+        const localGeo:any = cmapp.getStorage('localGeo');
         if (!localGeo || (localGeo && !localGeo.lng)) {
           cmapp.getLocation(authData);
         } else {
@@ -885,11 +878,11 @@ class cmappClass {
     // @ts-ignore
     uni.getWeRunData({
       success(res:any) {
-        cmapp.setLS('isWerRun', 'yes');
+        cmapp.setStorage('isWerRun', 'yes');
         func(2, res);
       },
       fail(res:any) {
-        cmapp.setLS('isWerRun', 'no');
+        cmapp.setStorage('isWerRun', 'no');
         func(1, res);
       },
     });
@@ -1061,11 +1054,11 @@ class cmappClass {
    */
   checkEnv(t:any) {
     const cmapp:any = this;
-    const env:any = cmapp.getLS('env');
-    if (env && env !== t.$conf.project.env) {
+    const env:any = cmapp.getStorage('env');
+    if (env && env !== t.$config.project.env) {
       cmapp.clearLS('');
     }
-    cmapp.setLS('env', t.$conf.project.env);
+    cmapp.setStorage('env', t.$config.project.env);
   }
   /**
    * 返回到已打开的某个页面
