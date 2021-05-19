@@ -32,7 +32,7 @@ class buildClass{
       runId:0,
       buildType:'dev',
       envType:'uat',
-      type:'binding',
+      type:'aiplat',
     };
   }
   writeFile(fileData:fileData) {
@@ -79,7 +79,7 @@ class buildClass{
       let envType = argv.original[runId + 2];
       envType = envType ? this.isIn(envType, 'env=', 'uat') :'uat';
       let type = argv.original[runId + 3];
-      type = type ? this.isIn(type, 'type=', 'binding') :'binding';
+      type = type ? this.isIn(type, 'type=', 'aiplat') :'aiplat';
       this.buildInfo = {
         runId,
         buildType,
@@ -136,7 +136,7 @@ class buildClass{
       newFile:`${currentDir}/src/builds/pages.json`,
     });
     this.buildFile({
-      oldFile:`${currentDir}/src/projects/${this.buildInfo.type}/manifest/${this.buildInfo.envType}.json`,
+      oldFile:`${currentDir}/src/projects/${this.buildInfo.type}/manifest/${this.buildInfo.envType}/manifest.json`,
       newFile:`${currentDir}/src/manifest.json`,
     });
     this.buildFile({
