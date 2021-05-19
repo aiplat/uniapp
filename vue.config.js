@@ -1,7 +1,6 @@
 const path = require('path');
 const devMode = process.env.NODE_ENV !== 'production';
 const compressionWebpackPlugin = require('compression-webpack-plugin');
-// const terserPlugin = require("terser-webpack-plugin");
 const cssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 function resolve(dir) {
@@ -45,33 +44,6 @@ module.exports = {
           new cssMinimizerPlugin(),
         ],
       };
-      // cfg.plugins.push(new terserPlugin({
-      //   terserOptions:{
-      //     ecma:undefined,
-      //     warnings:false,
-      //     parse:{},
-      //     compress:{
-      //       // drop_console:true,
-      //       // drop_debugger:false,
-      //       // pure_funcs:["console.log"]
-      //     },
-      //     mangle:true,
-      //     module:false,
-      //     output:null,
-      //     format:null,
-      //     toplevel:false,
-      //     nameCache:null,
-      //     ie8:false,
-      //     keep_classnames:undefined,
-      //     keep_fnames:false,
-      //     safari10:false,
-      //     extractComments:false,
-      //     format:{
-      //       comments:false,
-      //     },
-      //   },
-      //   extractComments:false,
-      // }));
     }
     cfg.resolve.extensions = ['.ts', '.js', '.vue', '.json'];
     cfg.resolve.alias = {

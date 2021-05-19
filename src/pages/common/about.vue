@@ -1,19 +1,19 @@
 <template>
   <div class="cm_main2">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="platform==='h5'"></Header1>
+      <ani-header1 :title="title" v-if="platform==='h5'"></ani-header1>
       <div class="cm_pc_12 ulMain" :class="{'cm_ptb4':platform==='h5','cm_pb1':platform!=='h5'}" v-if="isLoadEnd===1">
         <ul class="cm_pc_12">
           <li class="cm_pc_12 cm_mtb05">
-            <img :src="logo" class="cm_wh7 cm_br305 cm_fc"/>
+            <ani-image imgClass="cm_wh7 cm_br305 cm_fc" :imgUrl="logo"></ani-image>
           </li>
           <li class="cm_pc_12">
             <div class="cm_pc_12 cm_pd05 cm_bf cm_lh105 cm_ti2 cm_mb05">{{description}}</div>
           </li>
         </ul>
-        <Copyright :copyrightData="copyrightData"></Copyright>
+        <ani-copyright :copyrightData="copyrightData"></ani-copyright>
       </div>
-      <NoData v-else></NoData>
+      <ani-no-data v-else></ani-no-data>
     </div>
   </div>
 </template>

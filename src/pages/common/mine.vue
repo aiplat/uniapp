@@ -1,21 +1,21 @@
 <template>
   <div class="cm_main2 cm_bf">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="platform==='h5'"></Header1>
+      <ani-header1 :title="title" v-if="platform==='h5'"></ani-header1>
       <ul class="cm_pc_12 cm_bf" :class="{'cm_mtb4':platform==='h5','cm_mb1':platform!=='h5'}" v-if="isLoadEnd===1">
         <li class="cm_pc_12" v-if="userInfo">
           <div class="cm_pc_12 cm_bb1ce">
-            <img class="cm_pa cm_tl0 cm_wh4 cm_bs100 cm_br02 cm_m05" :src="userInfo.avatarUrl"/>
+            <ani-image imgClass="cm_pa cm_tl0 cm_wh4 cm_bs100 cm_br02 cm_m05" :imgUrl="userInfo.avatarUrl"></ani-image>
             <div class="cm_pc_12 cm_pl5 cm_minh5">
               <div class="cm_pc_12 nickName">{{userInfo.nickName}}</div>
               <div class="cm_pc_12 cm_c4c">{{userInfo.city||userInfo.province||userInfo.country}}</div>
             </div>
           </div>
-          <List01 class="cm_z99" :listData="findList" @listEmit="listEmit"></List01>
+          <ani-list01 class="cm_z99" :listData="findList" @listEmit="listEmit"></ani-list01>
         </li>
         <li class="cm_pc_12 cm_prl05 cm_mtb1" v-else>
           <div class="cm_pc_12 cm_mb1">
-            <img :src="logo" class="cm_wh7 cm_br305 cm_fc"/>
+            <ani-image imgClass="cm_wh7 cm_br305 cm_fc" :imgUrl="logo"></ani-image>
           </div>
           <div class="cm_pc_12 cm_tc cm_mb1">
             {{appName}}
@@ -28,7 +28,7 @@
           </div>
         </li>
       </ul>
-      <NoData v-else></NoData>
+      <ani-no-data v-else></ani-no-data>
     </div>
   </div>
 </template>

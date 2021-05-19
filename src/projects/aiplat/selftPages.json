@@ -28,6 +28,15 @@
       }
     },
     {
+      "path": "pages/common/userAgent",
+      "style": {
+        "navigationBarTitleText": "userAgent",
+        "h5": {
+          "titleNView": false
+        }
+      }
+    },
+    {
       "path": "pages/common/h5",
       "style": {
         "navigationBarTitleText": "h5站点",

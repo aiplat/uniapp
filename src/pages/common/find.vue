@@ -1,7 +1,7 @@
 <template>
   <div class="cm_main2">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="platform==='h5'"></Header1>
+      <ani-header1 :title="title" v-if="platform==='h5'"></ani-header1>
       <div class="cm_pc_12" :class="{'cm_mtb4':platform==='h5','cm_mb1':platform!=='h5'}">
         <ul class="cm_pc_12 cm_pd05">
           <li class="cm_pc_12 cm_pd05 cm_be">
@@ -9,7 +9,7 @@
               <div class="cm_pc_12 cm_lh3 cm_pl05 cm_pr3 cm_br02 cm_bf cm_bb1ce" v-for="(item1,index1) in findList" :key="index1" @click="$cmapp.jumpTo(item1.url)">
                 <div class="cmtou" v-if="item1.market">{{item1.market+'-'+item1.name}}</div>
                 <div class="cmtou" v-else>{{index1+1}}、{{item1.name}}</div>
-                <img class="cm_pa cm_tr0 cm_wh1 cm_bs100 cm_m1" :src="rightImg" background-size="cover"/>
+                <ani-image imgClass="cm_pa cm_tr0 cm_wh1 cm_bs100 cm_m1" :imgUrl="rightImg"  background-size="cover"></ani-image>
               </div>
             </div>
           </li>

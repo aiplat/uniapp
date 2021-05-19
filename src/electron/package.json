@@ -1,0 +1,9 @@
+{
+    "name": "aiplat.com-electron",
+    "version": "0.0.1",
+    "author": "aiplat.com",
+    "description": "electron app",
+    "scripts": {
+        "build:electron": "electron ./main.js"
+    }
+}

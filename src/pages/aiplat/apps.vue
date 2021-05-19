@@ -1,11 +1,11 @@
 <template>
   <div class="cm_main2">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="platform==='h5'"></Header1>
+      <ani-header1 :title="title" v-if="platform==='h5'"></ani-header1>
       <div class="cm_pc_12" :class="{'cm_mtb4':platform==='h5','cm_mb1':platform!=='h5'}">
         <ul class="cm_pc_12">
           <li class="cm_pc_12 cm_mt05">
-            <img class="cm_wh7 cm_fc" :src="logo"/>
+            <ani-image imgClass="cm_wh7 cm_fc" :imgUrl="logo"></ani-image>
           </li>
           <li class="cm_pc_12">
             <ul class="cm_pc_12 cm_prl05" v-for="(item1,index1) in indexData" :key="index1">

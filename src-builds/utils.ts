@@ -1,7 +1,3 @@
-const fs = require('fs');
-const shell = require('shelljs');
-const currentDir =  '.';
-
 interface fileData{
   file:string,
   content:string,
@@ -19,7 +15,10 @@ interface envData{
   buildType:string,
 }
 
-class buildClass{
+class utilsClass{
+  public fs = require('fs');
+  public shell = require('shelljs');
+  public currentDir =  '.';
   public buildInfo:envData;
   public envTxt:any = {
     sit:'SIT',
@@ -34,10 +33,11 @@ class buildClass{
       envType:'uat',
       type:'aiplat',
     };
+    this.getEnv();
   }
   writeFile(fileData:fileData) {
     return new Promise((resolve) => {
-      fs.writeFile(fileData.file, fileData.content, (err:any) => {
+      this.fs.writeFile(fileData.file, fileData.content, (err:any) => {
         if (err) {
           console.error(err);
         } else {
@@ -49,7 +49,7 @@ class buildClass{
   }
   readFile(fileData:fileData) {
     return new Promise((resolve) => {
-      fs.readFile(fileData.file, 'utf8', (err:any, data:string) => {
+      this.fs.readFile(fileData.file, 'utf8', (err:any, data:string) => {
         if (err) {
           console.error(err);
         }
@@ -62,7 +62,7 @@ class buildClass{
     return value;
   }
   buildFile(data:buildFileData) {
-    shell.cp('-R', data.oldFile, data.newFile);
+    this.shell.cp('-R', data.oldFile, data.newFile);
     console.log(`------Build ${data.newFile}------`);
   }
   getEnv() {
@@ -103,51 +103,15 @@ class buildClass{
     };
     return appType[type];
   }
-  async initStart() {
-    await this.getEnv();
-
-    const runDir = this.buildInfo.buildType === 'build' ? 'build' :'dev';
-    shell.rm('-rf', `${currentDir}/dist/${runDir}`);
-
-    const buildsDir = `${currentDir}/src/builds`;
-    shell.rm('-rf', buildsDir);
-    shell.mkdir('-p', buildsDir);
-
-    let appTypeName:any = this.buildInfo.buildType.split(':');
-    if (appTypeName && appTypeName.length > 1) {
-      appTypeName = appTypeName[1];
-    } else {
-      appTypeName = 'mp-weixin';
+  getParams() {
+    return {
+      fs: this.fs,
+      shell: this.shell,
+      currentDir: this.currentDir,
+      envTxt: this.envTxt,
+      ...this.buildInfo
     }
-    appTypeName = this.getAppTypeName(appTypeName);
-
-    console.log('');
-    const isDevTxt = this.buildInfo.buildType.includes('build') ? '构建' :'开发';
-    console.log(`------${appTypeName}平台-${this.envTxt[this.buildInfo.envType]}环境-${isDevTxt}-${this.buildInfo.type}------`);
-    console.log('');
-
-    await this.writeFile({
-      file:`${currentDir}/src/builds/envType.ts`,
-      content:`const envType:string = '${this.buildInfo.envType}';export default envType;`,
-    });
-
-    this.buildFile({
-      oldFile:`${currentDir}/src/projects/${this.buildInfo.type}/selftPages.json`,
-      newFile:`${currentDir}/src/builds/pages.json`,
-    });
-    this.buildFile({
-      oldFile:`${currentDir}/src/projects/${this.buildInfo.type}/manifest/${this.buildInfo.envType}/manifest.json`,
-      newFile:`${currentDir}/src/manifest.json`,
-    });
-    this.buildFile({
-      oldFile:`${currentDir}/src/projects/${this.buildInfo.type}/selfConfig.ts`,
-      newFile:`${currentDir}/src/builds/selfConfig.ts`,
-    });
-    console.log('');
-    console.log('------Building now------');
-    console.log('');
   }
 }
 
-const buildClassData = new buildClass();
-buildClassData.initStart();
+module.exports = utilsClass

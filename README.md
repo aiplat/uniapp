@@ -2,6 +2,7 @@
 
  - vue-cli4+vuex+cmui+html5+css3+typescript
  - 一次开发，同时打包成Android版app、iOS版app、H5版、微信小程序版、支付宝小程序版、百度小程序版、头条小程序7个平台，界面统一，功能一致。
+ - 新引入electron用于支持打包PC安装包
  - cmui仓库为https://github.com/aiplat/cmui.git
  - 代码示例为 https://aiplat.com 的版本 http://uniapp.aiplat.com
 
@@ -17,6 +18,7 @@
   - src
     - assets          ------静态css文件目录
     - components      ------公共组件目录
+    - electron        ------electron目录, 用于支持打包PC安装包
     - pages           ------视图目录
       - aiplat        ------aiplat项目视图目录
       - common        ------公共页面目录
@@ -89,3 +91,22 @@
  - 构建命令为npm run build --env=uat --type=jifenqi
 
 ---
+
+# 关于electron运行、构建、打包
+
+#### h5运行默认http://localhost:2016/#/
+## 运行：首页运行h5版本，再运行electron
+#### 单独git bash窗口1
+ - $ npm run dev:h5 --env=uat --type=aiplat
+#### 单独git bash窗口2
+ - $ npm run dev:electron --env=uat --type=aiplat
+ - 此时h5运行时项目运行到electron环境
+
+## 构建：首页构建h5版本，再构建electron，再打包（待添加完善）
+#### 单独git bash窗口1
+ - $ npm run build:h5 --env=uat --type=aiplat
+#### 单独git bash窗口2
+ - $ npm run build:electron --env=uat --type=aiplat
+ - 此时h5构建时项目运行到electron环境
+
+#### 打包PC安装包（待添加完善）

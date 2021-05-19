@@ -1,7 +1,7 @@
 <template>
   <div class="cm_main2">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="platform === 'h5'"></Header1>
+      <ani-header1 :title="title" v-if="platform === 'h5'"></ani-header1>
       <div
         class="cm_pc_12"
         :class="{ cm_mtb4: platform === 'h5', cm_mb1: platform !== 'h5' }"
@@ -36,11 +36,7 @@
             v-for="(item3, index3) in indexData.qrcodeList"
             :key="index3"
           >
-            <img
-              class="cm_h17 cm_fc"
-              :src="item3.img"
-              v-if="donateId == index3"
-            />
+            <ani-image imgClass="cm_h17 cm_fc" :imgUrl="item3.img" v-if="donateId == index3"></ani-image>
           </li>
           <li class="cm_pc_12 cm_prl05 cm_lh1 cm_ti2 cm_mb05">
             <span class="cm_fs08 cm_c1c">{{ indexData.about }}</span>

@@ -1,14 +1,14 @@
 <template>
   <div class="cm_main2">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="platform === 'h5'"></Header1>
+      <ani-header1 :title="title" v-if="platform === 'h5'"></ani-header1>
       <div
         class="cm_pc_12"
         :class="{ cm_mtb4: platform === 'h5', cm_mb1: platform !== 'h5' }"
       >
         <ul class="cm_pc_12">
-          <li class="cm_pc_12 cm_mt05">
-            <img :src="indexData.logo" class="cm_wh7 cm_br305 cm_fc" />
+          <li class="cm_pc_12 cm_mt05" @tap="$cmapp.jumpTo('/pages/common/userAgent')">
+            <ani-image imgClass="cm_wh7 cm_br305 cm_fc" :imgUrl="indexData.logo"></ani-image>
           </li>
           <li class="cm_pc_12 cm_be">
             <div class="cm_pc_12 cm_pd05 cm_bf cm_lh105 cm_ti2 cm_mb05">
@@ -144,15 +144,6 @@ export default Vue.extend({
   },
   onShow() {
     this.$cmapp.setNavigationBarColor();
-  },
-  mounted() {
-    window &&
-      window.uni &&
-      window.uni.$on("uploadEvent", (responseData: any) => {
-        console.log(responseData);
-        // 在其他app页面调用public/index.html的dispatchEvent方法，html5plus方法查看public/index.html
-        // dispatchEvent('uploadEvent', '数据')
-      });
   },
 });
 </script>

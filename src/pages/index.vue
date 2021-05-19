@@ -1,11 +1,11 @@
 <template>
   <div class="cm_main2">
     <div class="cm_pc_12">
-      <Header1 :title="title" v-if="platform==='h5'"></Header1>
+      <ani-header1 :title="title" v-if="platform==='h5'"></ani-header1>
       <div class="cm_pc_12 ulMain" :class="{'cm_ptb4':platform==='h5','cm_pb1':platform!=='h5'}">
         <ul class="cm_pc_12 cm_prl1">
           <li class="cm_pc_12 cm_mtb1">
-            <img :src="logo" class="cm_wh7 cm_br305 cm_fc"/>
+            <ani-image imgClass="cm_wh7 cm_br305 cm_fc" :imgUrl="logo"></ani-image>
           </li>
           <li class="cm_pc_12 cm_tc cm_bb1ce cm_pb1 cm_mb1">
             {{title}}
@@ -27,7 +27,7 @@
             <button class="cm_pc_12 cm_hl205 cm_c9b cm_cf cm_fs09" lang="zh_CN" open-type="getAuthorize" @getAuthorize="onALIGetAuthorize" scope="userInfo"><span>授权</span></button>
           </li>
         </ul>
-        <Copyright :copyrightData="copyrightData"></Copyright>
+        <ani-copyright :copyrightData="copyrightData"></ani-copyright>
       </div>
     </div>
   </div>
@@ -150,6 +150,15 @@
     async onLoad(query:any) {
       this.$cmapp.setNavigationBarColor();
       this.$cmapp.noAuthIndex(this, 'yes', query);
+    },
+    mounted() {
+      window &&
+        window.uni &&
+        window.uni.$on("uploadEvent", (responseData: any) => {
+          console.log(responseData);
+          // 在其他app页面调用public/index.html的dispatchEvent方法，html5plus方法查看public/index.html
+          // dispatchEvent('uploadEvent', '数据')
+        });
     },
   });
 </script>
