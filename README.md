@@ -95,17 +95,17 @@
 # 关于electron运行、构建、打包
 
 #### h5运行默认http://localhost:2016/#/
-## 运行：首页运行h5版本，再运行electron
-#### 单独git bash窗口1
+## 运行：首先运行h5版本，再运行electron
+#### 运行h5,单独git bash窗口1
  - $ npm run dev:h5 --env=uat --type=aiplat
-#### 单独git bash窗口2
+#### 运行h5之后，单独git bash窗口2
  - $ npm run dev:electron --env=uat --type=aiplat
  - 此时h5运行时项目运行到electron环境
 
-## 构建：首页构建h5版本，再构建electron，再打包（待添加完善）
-#### 单独git bash窗口1
+## 构建：首先构建h5版本，再构建electron，再打包（待添加完善）
+#### 构建h5
  - $ npm run build:h5 --env=uat --type=aiplat
-#### 单独git bash窗口2
+#### 构建h5之后继续执行
  - $ npm run build:electron --env=uat --type=aiplat
  - 此时h5构建时项目运行到electron环境
 
