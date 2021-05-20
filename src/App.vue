@@ -4,11 +4,11 @@
     mpType: 'app',
     async onLaunch() {
       console.log('App Launch');
-      const $vue:any = this;
       // #ifdef MP-WEIXIN
-      await $vue.$cmapp.update();
-      await $vue.$cmapp.notFound($vue);
+      await this.$cmapp.update();
+      // await this.$cmapp.notFound(this);
       // #endif
+      this.$cmapp.setEnvironmentInfo(this);
     },
     async onShow() {
       console.log('App Show');

@@ -15,25 +15,18 @@
   </ul>
 </template>
 <script lang="ts">
-import Vue from "vue";
-export default Vue.extend({
-  props: {
-    listData: {
-      type: Array,
-      default() {
-        return [];
-      },
+import { Vue, Prop } from "vue-property-decorator";
+export default class aniList01 extends Vue {
+  @Prop({
+    type: Array,
+    default() {
+      return [];
     },
-  },
-  data() {
-    return {
-      rightImg: "../../static/aiplat/cm_right.png",
-    };
-  },
-  methods: {
-    listEmit(item: any) {
-      this.$emit("listEmit", item);
-    },
-  },
-});
+  })
+  listData: any;
+  rightImg = require("@/static/aiplat/cm_right.png")
+  listEmit(item: any) {
+    this.$emit("listEmit", item);
+  }
+}
 </script>

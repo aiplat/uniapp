@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "build": "ts-node src-builds/config.ts && cross-env NODE_ENV=production UNI_PLATFORM=mp-weixin vue-cli-service uni-build",
+    "build": "npm run build:h5",
     "build:app-plus": "ts-node src-builds/config.ts && cross-env NODE_ENV=production UNI_PLATFORM=app-plus vue-cli-service uni-build",
     "build:custom": "ts-node src-builds/config.ts && cross-env NODE_ENV=production uniapp-cli custom",
     "build:h5": "ts-node src-builds/config.ts && cross-env NODE_ENV=production UNI_PLATFORM=h5 vue-cli-service uni-build",
@@ -18,7 +18,7 @@
     "build:quickapp-webview-huawei": "ts-node src-builds/config.ts && cross-env NODE_ENV=production UNI_PLATFORM=quickapp-webview-huawei vue-cli-service uni-build",
     "build:quickapp-webview-union": "ts-node src-builds/config.ts && cross-env NODE_ENV=production UNI_PLATFORM=quickapp-webview-union vue-cli-service uni-build",
     "build:electron": "ts-node src-builds/electron.ts && electron dist/build/h5/main.js",
-    "dev": "ts-node src-builds/config.ts && cross-env NODE_ENV=development UNI_PLATFORM=mp-weixin vue-cli-service uni-build --watch",
+    "dev": "npm run dev:h5",
     "dev:app-plus": "ts-node src-builds/config.ts && cross-env NODE_ENV=development UNI_PLATFORM=app-plus vue-cli-service uni-build --watch",
     "dev:custom": "ts-node src-builds/config.ts && cross-env NODE_ENV=development uniapp-cli custom",
     "dev:h5": "ts-node src-builds/config.ts && cross-env NODE_ENV=development UNI_PLATFORM=h5 vue-cli-service uni-serve",
@@ -63,7 +63,7 @@
     "regenerator-runtime": "^0.12.1",
     "vue": "^2.6.11",
     "vue-class-component": "^6.3.2",
-    "vue-property-decorator": "^8.0.0",
+    "vue-property-decorator": "^8.5.1",
     "vuex": "^3.2.0",
     "weixin-js-sdk": "^1.6.0"
   },
@@ -83,6 +83,7 @@
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-typescript": "*",
     "@vue/cli-service": "~4.5.0",
+    "axios": "^0.21.1",
     "babel-plugin-import": "^1.11.0",
     "compression-webpack-plugin": "^3.1.0",
     "cross-env": "^7.0.2",
@@ -98,7 +99,9 @@
     "shelljs": "^0.8.3",
     "ts-node": "^8.10.2",
     "typescript": "^3.0.0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-class-component": "^6.3.2",
+    "vue-template-compiler": "^2.6.11",
+    "vuex-class": "^0.3.2"
   },
   "browserslist": [
     "Android >= 4",

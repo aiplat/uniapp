@@ -1,11 +1,20 @@
-import state from './state';
-import mutations from './mutations';
-import getters from './getters';
-import actions from './actions';
-
 export default {
-  state,
-  mutations,
-  getters,
-  actions,
-};
+  state: {
+    userInfo: null
+  },
+  mutations: {
+    SETUSERINFO (store:any, data:any) {
+      store.userInfo = data
+    },
+  },
+  getters: {
+    getUserInfo (status:any) {
+      return status.userInfo
+    },
+  },
+  actions: {
+    setUserInfo ({ commit }:any, data:any) {
+      commit('SETUSERINFO', data);
+    },
+  }
+}

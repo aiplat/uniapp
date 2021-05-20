@@ -51,12 +51,14 @@
  - $ npm install
 
 # 开发模式
- - npm run dev   (默认微信小程序开发)
+ - $ npm run dev   (默认h5开发) h5运行默认打开 http://localhost:2016/#/
+ - $ npm run dev:mp-weixin   (微信小程序开发)
  - 打开微信开发者工具->小程序->导入项目->选择dist/dev/mp-weixin
  - 若有多个项目同一个仓库，$ npm run dev --env=uat --type=** 区分
 
 # 打包项目
- - $ npm run build (默认构建微信小程序)
+ - $ npm run build (默认构建h5)
+ - $ npm run build:mp-weixin   (微信小程序构建)
  - 单个项目（默认aiplat）代码打包到了dist/build/mp-weixin
  - 若有多个项目同一个仓库，$ npm run build --env=uat --type=** 区分
 
@@ -66,16 +68,16 @@
  - 开发工具为任意，不一定要HbuilderX.如果也要同时打包成app，再导入项目到HbuilderX打包。
  - 开发或构建成其他平台命令：
  - dev为开发模式，build为构建模式
- - 这七个平台标识：mp-alipay、mp-baidu、mp-qq、mp-toutiao、app-plus（包含安卓和ios）、h5、mp-weixin(默认)
+ - 这七个平台标识：mp-alipay、mp-baidu、mp-qq、mp-toutiao、app-plus（包含安卓和ios）、h5(默认)、mp-weixin
  - 参数--env=uat为环境参数，默认uat。
  - 参数--type=aiplat为项目名，默认aiplat。
  - 例如：
- - npm run dev:baidu --env=uat --type=** 为百度小程序平台->uat环境(测试环境)->开发模式
- - npm run dev:baidu --env=ver --type=** 为百度小程序平台->ver环境(预生产环境)->开发模式
- - npm run dev:baidu --env=pro --type=** 为百度小程序平台->pro环境(生产环境)->开发模式
- - npm run build:baidu --env=uat --type=** 为百度小程序平台->uat环境(测试环境)->构建模式
- - npm run build:baidu --env=ver --type=** 为百度小程序平台->ver环境(预生产环境)->构建模式
- - npm run build:baidu --env=pro --type=** 为百度小程序平台->pro环境(生产环境)->构建模式
+ - $ npm run dev:baidu --env=uat --type=** 为百度小程序平台->uat环境(测试环境)->开发模式
+ - $ npm run dev:baidu --env=ver --type=** 为百度小程序平台->ver环境(预生产环境)->开发模式
+ - $ npm run dev:baidu --env=pro --type=** 为百度小程序平台->pro环境(生产环境)->开发模式
+ - $ npm run build:baidu --env=uat --type=** 为百度小程序平台->uat环境(测试环境)->构建模式
+ - $ npm run build:baidu --env=ver --type=** 为百度小程序平台->ver环境(预生产环境)->构建模式
+ - $ npm run build:baidu --env=pro --type=** 为百度小程序平台->pro环境(生产环境)->构建模式
 
 ---
 

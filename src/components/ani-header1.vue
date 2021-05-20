@@ -9,25 +9,13 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from "vue";
-export default Vue.extend({
-  props: {
-    title: {
-      type: String,
-      default: "",
-    },
-    isBack: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data() {
-    return {};
-  },
-  methods: {
-    goToBack() {
+import { Component, Vue, Prop } from "vue-property-decorator";
+@Component({})
+export default class aniHeader1 extends Vue {
+  @Prop({type: String, default: ''}) title:any
+  @Prop({type: Boolean, default: false}) isBack:any
+  goToBack() {
       this.$cmapp.jumpTo('', 'navigateBack');
-    }
   }
-});
+};
 </script>

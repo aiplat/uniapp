@@ -12,28 +12,25 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-export default Vue.extend({
-  props: {
-    bottomLeft: {
-      type: String,
-      default: "cm_bl0",
+import { Component, Vue, Prop } from "vue-property-decorator";
+@Component({})
+export default class aniCopyright extends Vue {
+  @Prop({ type: String, default: "cm_bl0" }) bottomLeft: any;
+  @Prop({ type: String, default: "cm_c3c" }) color1: any;
+  @Prop({
+    type: Object,
+    default() {
+      return {
+        copyright: "",
+        name: "",
+        site: "",
+        placeClass: "",
+      };
     },
-    color1: {
-      type: String,
-      default: "cm_c3c",
-    },
-    copyrightData: {
-      type: Object,
-      default() {
-        return {
-          copyright: "",
-          name: "",
-          site: "",
-          placeClass: "",
-        };
-      },
-    },
-  },
-});
+  })
+  copyrightData: any;
+  goToBack() {
+    this.$cmapp.jumpTo("", "navigateBack");
+  }
+}
 </script>

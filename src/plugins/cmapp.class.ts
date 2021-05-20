@@ -12,6 +12,7 @@ class cmappClass {
   public authCallBack:any; // 对应 以下参数 func，当类型function时授权之后返回到上一页执行一次func
   public authType:number; // 对应authTypeObj
   public authTypeObj:Array<any>; // 微信授权
+  public environmentInfo: any; // 环境详情参数
   constructor() {
     this.authType = 0;
     this.authTypeObj = [
@@ -41,7 +42,7 @@ class cmappClass {
   getStorage(k:string) {
     return uni.getStorageSync(k) || '';
   }
-  clearLS(k: string) {
+  clearStorage(k: string) {
     if (k) {
       uni.removeStorageSync(k);
     } else {
@@ -55,7 +56,7 @@ class cmappClass {
     const time:any = cmapp.getStorage(timeKey);
     let id:number = 1;
     if (kid && time && nd - time >= 1000 * 60 * s) {
-      cmapp.clearLS(k);
+      cmapp.clearStorage(k);
       id = 0;
     }
     if (typeof func === 'function') {
@@ -76,14 +77,33 @@ class cmappClass {
       },
     });
   }
-  getQuery(type:string, func:any) {// 获取div信息
-    const query:any = uni.createSelectorQuery();
-    query.select(type).boundingClientRect();
-    query.selectViewport().scrollOffset();
-    query.exec((res:any) => {
-      if (typeof func === 'function') {
-        func(res);
-      }
+  getSearchValue(name: string, path = '') {
+    let reg: any = new RegExp(name + '=([^&]*)(&|$)', 'i');
+    const params = path || window.location.href;
+    reg = params.substr(1).match(reg);
+    const value = reg != null ? reg[1] : null;
+    return value;
+  }
+  getQuery($vue: any, key: string) {
+    const route = '_route';
+    let query = $vue.$mp && $vue.$mp.query || null;
+    const query2 = $vue[route] && $vue[route].query || null;
+    const query3 = $vue.__page__ && $vue.__page__.options || null;
+    query = query || query2 || query3;
+    if (key === 'query') {
+      return query || '';
+    }
+    const value2 = window.location.href.includes(`${key}=`) && this.getSearchValue(key) || '';
+    return query && query[key] || value2 || '';
+  }
+  getSelectorInfo(selector: string) {
+    return new Promise((resolve: any) => {
+      const query: any = uni.createSelectorQuery();
+      query.select(selector).boundingClientRect();
+      query.selectViewport().scrollOffset();
+      query.exec((res: any) => {
+        resolve(res);
+      });
     });
   }
   getDivMatrix(m:any) { // 获取旋转对象div的matrix转换为角度
@@ -136,7 +156,7 @@ class cmappClass {
     });
 
     u.onUpdateReady(function () {
-      cmapp.clearLS('');
+      cmapp.clearStorage('');
       const a:object = {
         title: '新版本更新中..',
         icon: 'none',
@@ -172,13 +192,13 @@ class cmappClass {
         },
         envVersion: 'trial',
         success() {
-          cmapp.clearLS('isOpenMp');
+          cmapp.clearStorage('isOpenMp');
           if (typeof func === 'function') {
             func();
           }
         },
         fail() {
-          cmapp.clearLS('isOpenMp');
+          cmapp.clearStorage('isOpenMp');
           if (typeof func === 'function') {
             func();
           }
@@ -243,10 +263,10 @@ class cmappClass {
     if (typeof cmapp.authCallBack === 'function' && isCallBack && isCallBack === 'yes') {
       cmapp.authCallBack();
       cmapp.authCallBack = '';
-      cmapp.clearLS('isCallBack');
+      cmapp.clearStorage('isCallBack');
     } else if (isCallBack === 'yes') {
       cmapp.authCallBack = '';
-      cmapp.clearLS('isCallBack');
+      cmapp.clearStorage('isCallBack');
     }
   }
   /**
@@ -303,7 +323,7 @@ class cmappClass {
       });
       const openid = responseData.isSuccess && responseData.data && responseData.data.list && responseData.data.list.openid || null;
       openid && cmapp.setStorage('openid', openid);
-      !openid && cmapp.clearLS('openid');
+      !openid && cmapp.clearStorage('openid');
       resolve(openid);
     });
   }
@@ -371,7 +391,7 @@ class cmappClass {
     if (query && query[k]) {
       cmapp.setStorage(k, decodeURIComponent(query[k]));
     } else {
-      cmapp.clearLS(k);
+      cmapp.clearStorage(k);
     }
   }
   /**
@@ -1056,7 +1076,7 @@ class cmappClass {
     const cmapp:any = this;
     const env:any = cmapp.getStorage('env');
     if (env && env !== t.$config.project.env) {
-      cmapp.clearLS('');
+      cmapp.clearStorage('');
     }
     cmapp.setStorage('env', t.$config.project.env);
   }
@@ -1082,6 +1102,62 @@ class cmappClass {
         }, 100);
       }
     }
+  }
+  getAppType() {
+    if (!window) {
+      return 'miniprogram';
+    }
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    if (userAgent && /(android)/i.test(userAgent)) {
+      return 'android';
+    } else if (userAgent && /(iphone|ipad|ipod|ios)/i.test(userAgent)) {
+      return 'ios';
+    } else if (userAgent && /(mobile|micromessenger)/i.test(userAgent)) {
+      return 'mobile';
+    }
+    return 'pc'; // pc
+  }
+  async setEnvironmentInfo($vue: any) {
+    const environmentInfo: any = {
+      userAgent: null,
+      isElectron: 0, // 是否为electron环境
+      isWeixin: 0, // 微信环境
+      isWechat: 0, // 公众号环境
+      isWxwork: 0, // 企业微信环境
+      isDevtools: 0, // 微信开发者工具环境
+      isApp: 0, // app环境
+      isHvoi: 0, // 特定手机或系统
+      isWebview: this.getQuery($vue, 'isWebview') ? 1 : 0, // 是否为内嵌的webview
+      appType: this.getAppType()
+    };
+    // #ifdef APP-PLUS
+    environmentInfo.isApp = 1;
+    // #endif
+    const weixinType = this.getQuery($vue, 'weixinType') || this.getStorage('weixinType');
+    if (weixinType) {
+      this.setStorage('weixinType', weixinType);
+    }
+    // #ifdef H5
+    environmentInfo.userAgent = window.navigator.userAgent.toLowerCase();
+    environmentInfo.isElectron = environmentInfo.userAgent.includes('electron') ? 1 : 0;
+    environmentInfo.isWeixin = environmentInfo.userAgent.includes('micromessenger') ? 1 : 0;
+    environmentInfo.isWxwork = environmentInfo.userAgent.includes('wxwork') ? 1 : 0;
+    environmentInfo.isWechat = (environmentInfo.isWeixin && !environmentInfo.isWxwork) || environmentInfo.userAgent.includes('wechat') ? 1 : 0;
+    environmentInfo.isDevtools = environmentInfo.userAgent.includes('wechatdevtools') ? 1 : 0;
+    environmentInfo.isApp = environmentInfo.userAgent.includes('html5plus') ? 1 : 0;
+    const hvoi = environmentInfo.userAgent.includes('huawei') || environmentInfo.userAgent.includes('vivo') || environmentInfo.userAgent.includes('oppo') || environmentInfo.userAgent.includes('iphone');
+    environmentInfo.isHvoi = hvoi ? 1 : 0;
+    // #endif
+    if (weixinType === 'wechat') {
+      environmentInfo.isWechat = 1;
+      environmentInfo.isWxwork = 0;
+    }
+    if (weixinType === 'wxwork') {
+      environmentInfo.isWechat = 0;
+      environmentInfo.isWxwork = 1;
+    }
+    this.environmentInfo = environmentInfo;
+    $vue.$forceUpdate();
   }
 }
 

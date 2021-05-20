@@ -6,17 +6,16 @@
   </view>
 </template>
 <script lang="ts">
-import Vue from "vue";
-export default Vue.extend({
-  props: {
-    message: {
-      type: Object,
-      default() {
-        return {
+import { Vue, Prop } from "vue-property-decorator";
+export default class aniNoData extends Vue {
+  @Prop({
+    type: Object,
+    default() {
+      return {
           title: "正在拼命加载中..",
         };
-      },
     },
-  },
-});
+  })
+  message: any;
+}
 </script>

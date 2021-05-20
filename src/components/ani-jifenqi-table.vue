@@ -37,23 +37,19 @@
   </ul>
 </template>
 <script lang="ts">
-import Vue from "vue";
-export default Vue.extend({
-  props: {
-    tableData: {
-      type: Object,
-      default() {
-        return {
-          columnList: [],
-          rowList: [],
-        };
-      },
+import { Vue, Prop } from "vue-property-decorator";
+export default class aniJifenqiTable extends Vue {
+  @Prop({
+    type: Object,
+    default() {
+      return {
+        columnList: [],
+        rowList: [],
+      };
     },
-  },
-  data() {
-    return {};
-  },
-});
+  })
+  tableData: any;
+}
 </script>
 <style lang="less" scoped>
 .columnList {

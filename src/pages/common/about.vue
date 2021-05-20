@@ -18,26 +18,16 @@
   </div>
 </template>
 <script lang="ts">
-  import Vue from 'vue';
-  export default Vue.extend({
-    components: {},
-    data() {
-      return {
-        title: `关于${this.$config.project.name}`,
-        logo: '../../static/aiplat/icon.png',
-        description: this.$config.project.description,
-        copyright: `${this.$config.project.copyright} ${this.$config.project.email}`,
-        platform: this.$config.platform,
-        isLoadEnd: 0,
-        copyrightData: this.$config.project,
-      };
-    },
-    computed: {
-      userInfo() {
-        return this.$store.getters.getUserInfo;
-      },
-    },
-    onShareAppMessage() {
+import { Vue } from "vue-property-decorator";
+export default class aboutPage extends Vue {
+  title = `关于${this.$config.project.name}`
+  logo = require('@/static/aiplat/icon.png')
+  description = this.$config.project.description
+  copyright = `${this.$config.project.copyright} ${this.$config.project.email}`
+  platform = this.$config.platform
+  isLoadEnd = 0
+  copyrightData = this.$config.project
+  onShareAppMessage() {
       const url:string = `/pages/${this.$config.project.type}/index`;
       return this.$cmapp.setShareMessage(this, {
         sharePage: url,
@@ -45,15 +35,15 @@
         shareTitle: `${this.$config.site}欢迎您`,
         shareUrl: '',
       });
-    },
+    }
     onShow() {
       this.$cmapp.setNavigationBarColor();
       this.isLoadEnd = 1;
       uni.setNavigationBarTitle({
         title: `关于${this.$config.project.name}`,
       });
-    },
-  });
+    }
+}
 </script>
 <style lang="less">
 </style>
