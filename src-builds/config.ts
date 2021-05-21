@@ -31,7 +31,7 @@ class configClass{
     });
 
     utilsClass.buildFile({
-      oldFile:`${utilsParams.currentDir}/src/projects/${utilsParams.type}/selftPages.json`,
+      oldFile:`${utilsParams.currentDir}/src/projects/${utilsParams.type}/selfPages.json`,
       newFile:`${utilsParams.currentDir}/src/pages.json`,
     });
     utilsClass.buildFile({

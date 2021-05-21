@@ -105,7 +105,7 @@
  - manifest目录下还有uat/ver/pro(三个环境目录)  
    -  manifest.json  -- uni-app应用的配置文件，用于指定应用的名称、图标、权限等。运行微信和头条小程序时请先将其中的appid改为自己可用的。
  - selfConfig.ts      -- aiplat配置信息
- - selftPages.json     -- 用于对 uni-app 进行全局配置，决定页面文件的路径、窗口表现、设置多 tab 等
+ - selfPages.json     -- 用于对 uni-app 进行全局配置，决定页面文件的路径、窗口表现、设置多 tab 等
  - 运行构建APP前先执行一次dev或build命令，使src目录里有以上对应的三个文件。
 
  ## 当有其他项目时如jifenqi(娱乐计分器,后续开源):
