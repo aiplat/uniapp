@@ -6,15 +6,18 @@ class configClass{
     const utilsClass = new this.utils();
     const utilsParams = utilsClass.getParams();
 
+    let appTypeName:any = utilsParams.buildType.split(':');
+    appTypeName = appTypeName && appTypeName.length > 1 ? appTypeName[1] : 'h5';
+
     const runDir = utilsParams.buildType.includes('build') ? 'build' :'dev';
-    utilsParams.shell.rm('-rf', `${utilsParams.currentDir}/dist/${runDir}`);
+    utilsParams.shell.rm('-rf', `${utilsParams.currentDir}/dist/${runDir}/${appTypeName}`);
+    utilsParams.shell.rm('-rf', `${utilsParams.currentDir}/dist/${runDir}/.automator/${appTypeName}`);
+    utilsParams.shell.rm('-rf', `${utilsParams.currentDir}/dist/${runDir}/.sourcemap/${appTypeName}`);
 
     const buildsDir = `${utilsParams.currentDir}/src/builds`;
     utilsParams.shell.rm('-rf', buildsDir);
     utilsParams.shell.mkdir('-p', buildsDir);
 
-    let appTypeName:any = utilsParams.buildType.split(':');
-    appTypeName = appTypeName && appTypeName.length > 1 ? appTypeName[1] : 'h5';
     appTypeName = utilsClass.getAppTypeName(appTypeName);
 
     console.log('');

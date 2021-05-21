@@ -63,9 +63,10 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const commonModule = namespace("commonModule/index");
+@Component({})
 export default class homePage extends Vue {
   project = this.$config.project.name;
   title = this.$config.project.name;
@@ -108,7 +109,7 @@ export default class homePage extends Vue {
         },
         () => {
           console.log("未授权");
-          $vue.$cmapp.clearStorage("isAuth");
+          $vue.$cmapp.removeStorage("isAuth");
         }
       );
     }

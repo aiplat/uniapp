@@ -16,7 +16,8 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
+@Component({})
 export default class aniPopWin extends Vue {
   @Prop({ type: String, default: "no" }) popIsShow: any;
   @Prop({

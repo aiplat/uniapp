@@ -1,6 +1,7 @@
 export default {
   state: {
-    userInfo: null
+    userInfo: null,  // 用户信息
+    systemInfo: null, // 
   },
   mutations: {
     SETUSERINFO (store:any, data:any) {

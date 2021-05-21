@@ -15,7 +15,8 @@
   </ul>
 </template>
 <script lang="ts">
-import { Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
+@Component({})
 export default class aniList01 extends Vue {
   @Prop({
     type: Array,

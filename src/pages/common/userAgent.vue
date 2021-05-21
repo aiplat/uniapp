@@ -10,22 +10,22 @@
         class="cm_pc_12"
         :class="{ cm_mtb4: platform === 'h5', cm_mb1: platform !== 'h5' }"
       >
-        <input
-          type="text"
-          :value="(userAgent && JSON.stringify(userAgent)) || '加载中..'"
+        <textarea
+          class="cm_h10"
+          :value="(userAgent && JSON.stringify(userAgent)) || (!isLoadEnd && '加载中..' || '小程序无window信息')"
         />
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
-// import { namespace } from "vuex-class";
-// const commonModule = namespace("commonModule/index");
+import { Component, Vue } from "vue-property-decorator";
+@Component({})
 export default class userAgentPage extends Vue {
   title = "userAgent";
   platform = this.$config.platform;
   userAgent = "";
+  isLoadEnd = 0;
   onShareAppMessage() {
     const url: string = `/pages/${this.$config.project.type}/index`;
     return this.$cmapp.setShareMessage(this, {
@@ -35,9 +35,13 @@ export default class userAgentPage extends Vue {
       shareUrl: "",
     });
   }
+  initStart() {
+    this.userAgent = window && window.navigator.userAgent.toLowerCase() || '';
+    this.isLoadEnd = 1;
+  }
   onShow() {
     this.$cmapp.setNavigationBarColor();
-    this.userAgent = window.navigator.userAgent.toLowerCase();
+    this.initStart();
   }
 }
 </script>

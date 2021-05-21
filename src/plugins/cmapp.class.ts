@@ -12,7 +12,20 @@ class cmappClass {
   public authCallBack:any; // 对应 以下参数 func，当类型function时授权之后返回到上一页执行一次func
   public authType:number; // 对应authTypeObj
   public authTypeObj:Array<any>; // 微信授权
-  public environmentInfo: any; // 环境详情参数
+  public environmentInfo: any = {
+    userAgent: null,
+    isMiniprogram: !window, // 是否为小程序环境
+    isElectron: 0, // 是否为electron环境
+    isWeixin: 0, // 微信环境
+    isWechat: 0, // 公众号环境
+    isWxwork: 0, // 企业微信环境
+    isDevtools: 0, // 微信开发者工具环境
+    isApp: 0, // app环境
+    isHvoi: 0, // 特定手机或系统
+    isWebview: 0, // 是否为内嵌的webview
+    appType: 0
+  }; // 环境详情参数
+  public innerAudioContext: any;
   constructor() {
     this.authType = 0;
     this.authTypeObj = [
@@ -36,16 +49,53 @@ class cmappClass {
       },
     ];
   }
-  setStorage(k:string, v:any) {
-    uni.setStorageSync(k, v);
+  getUniApi(uniApi: any, config = {}) {
+    let isSuccess = 0;
+    return new Promise((resolve: any, reject: any) => {
+      const callback = {
+        ...config,
+        success(res: any) {
+          isSuccess = 1;
+          resolve({
+            isSuccess,
+            res,
+          });
+        },
+        fail(res: any) {
+          reject({
+            isSuccess,
+            res,
+          });
+        },
+      }
+      uniApi(callback);
+    });
   }
-  getStorage(k:string) {
-    return uni.getStorageSync(k) || '';
+  isApp() {
+    return window && window.plus || false;
   }
-  clearStorage(k: string) {
-    if (k) {
-      uni.removeStorageSync(k);
+  setStorage(key: string, value: any, type = 'uni') {
+    if (type === 'plus') {
+      this.isApp() && window.plus.storage.setItem(key, value) || window.localStorage.setItem(key, value);
+      return;
+    }
+    uni.setStorageSync(key, value);
+  }
+  getStorage(key: string, type = 'uni') {
+    if (type === 'plus') {
+      return this.isApp() && window.plus.storage.getItem(key) || window.localStorage.getItem(key) || '';
+    }
+    return uni.getStorageSync(key) || '';
+  }
+  removeStorage(key: string, type = 'uni') {
+    if (key) {
+      if (type === 'plus') {
+        this.isApp() && window.plus.storage.removeItem(key) || window.localStorage.removeItem(key);
+        return;
+      }
+      uni.removeStorageSync(key);
     } else {
+      window && window.localStorage.clear();
       uni.clearStorageSync();
     }
   }
@@ -56,30 +106,17 @@ class cmappClass {
     const time:any = cmapp.getStorage(timeKey);
     let id:number = 1;
     if (kid && time && nd - time >= 1000 * 60 * s) {
-      cmapp.clearStorage(k);
+      cmapp.removeStorage(k);
       id = 0;
     }
     if (typeof func === 'function') {
       func(id);
     }
   }
-  checkSession(func:any) {// 检测session id是否失效
-    uni.checkSession({
-      success() {
-        if (typeof func === 'function') {
-          func(1);
-        }
-      },
-      fail() {
-        if (typeof func === 'function') {
-          func(0);
-        }
-      },
-    });
-  }
   getSearchValue(name: string, path = '') {
     let reg: any = new RegExp(name + '=([^&]*)(&|$)', 'i');
-    const params = path || window.location.href;
+    const params = path || (!this.environmentInfo.isMiniprogram && window.location.href || '');
+
     reg = params.substr(1).match(reg);
     const value = reg != null ? reg[1] : null;
     return value;
@@ -93,7 +130,7 @@ class cmappClass {
     if (key === 'query') {
       return query || '';
     }
-    const value2 = window.location.href.includes(`${key}=`) && this.getSearchValue(key) || '';
+    const value2 = !this.environmentInfo.isMiniprogram && window.location.href.includes(`${key}=`) && this.getSearchValue(key) || '';
     return query && query[key] || value2 || '';
   }
   getSelectorInfo(selector: string) {
@@ -123,87 +160,58 @@ class cmappClass {
     }
     return deg >= d2 ? 0 : deg;
   }
-  getDivDeg(id:string, func:any) { // 获取旋转对象div的matrix
-    const cmapp:any = this;
-    uni.createSelectorQuery().select(id).fields({
-      dataset: true,
-      size: true,
-      scrollOffset: true,
-      properties: ['scrollX', 'scrollY'],
-      computedStyle: ['animation', 'transform'],
-      context: true,
-    }, async function (res:any) {
-      if (res.transform) {
-        const a:any = res.transform;
-        const matrix:any = a.split(',');
-        if (matrix && matrix.length > 0) {
-          matrix[0] = matrix[0].split('(').pop();
-          const deg:any = await cmapp.getDivMatrix(matrix);
-          func(deg);
+  /**
+   * 获取旋转对象div的matrix
+   * @param selector
+   */
+   getDivDeg(selector: string) {
+    const $cmapp: any = this;
+    return new Promise((resolve: any, reject: any) => {
+      uni.createSelectorQuery().select(selector).fields({
+        dataset: true,
+        size: true,
+        scrollOffset: true,
+        properties: ['scrollX', 'scrollY'],
+        computedStyle: ['animation', 'transform'],
+        context: true,
+      }, async function (res: any) {
+        if (res.transform) {
+          const transform: any = res.transform;
+          const matrix: any = transform.split(',');
+          if (matrix && matrix.length > 0) {
+            matrix[0] = matrix[0].split('(').pop();
+            const deg: any = await $cmapp.getDivMatrix(matrix);
+            resolve(deg);
+          } else {
+            reject(0);
+          }
         } else {
-          func(0);
+          reject(0);
         }
-      }
-    }).exec();
+      }).exec();
+    });
   }
   update() {// 升级
     const cmapp:any = this;
-    const u:any = uni.getUpdateManager();
+    const updateManager:any = uni.getUpdateManager();
 
-    u.onCheckForUpdate((res:any) => {
+    updateManager.onCheckForUpdate((res:any) => {
       // 请求完新版本信息的回调
       console.log(res.hasUpdate);
     });
 
-    u.onUpdateReady(function () {
-      cmapp.clearStorage('');
+    updateManager.onUpdateReady(function () {
+      cmapp.removeStorage('');
       const a:object = {
         title: '新版本更新中..',
         icon: 'none',
       };
       uni.showToast(a);
-      u.applyUpdate();
+      updateManager.applyUpdate();
     });
 
-    u.onUpdateFailed(() => {
+    updateManager.onUpdateFailed(() => {
       // 新版本下载失败
-    });
-  }
-  /**
-   * 打开小程序
-   * @param t
-   * @param appId  打开的小程序id
-   * @param path  打开的小程序的路径
-   * @param userInfo 传过去的数据
-   * @param func 打开成败的回调
-   */
-  openMiniProgram(t:any, appId:string, path = '', userInfo:any, func:any) {
-    const cmapp:any = this;
-    cmapp.isToAuth('auth', '', 'navigateBack', () => {
-      if (cmapp.getStorage('isOpenMp')) {
-        return;
-      }
-      cmapp.setStorage('isOpenMp', 'yes');
-      uni.navigateToMiniProgram({
-        appId: appId,
-        path: path,
-        extraData: {
-          userInfo: userInfo,
-        },
-        envVersion: 'trial',
-        success() {
-          cmapp.clearStorage('isOpenMp');
-          if (typeof func === 'function') {
-            func();
-          }
-        },
-        fail() {
-          cmapp.clearStorage('isOpenMp');
-          if (typeof func === 'function') {
-            func();
-          }
-        },
-      });
     });
   }
   /**
@@ -263,10 +271,10 @@ class cmappClass {
     if (typeof cmapp.authCallBack === 'function' && isCallBack && isCallBack === 'yes') {
       cmapp.authCallBack();
       cmapp.authCallBack = '';
-      cmapp.clearStorage('isCallBack');
+      cmapp.removeStorage('isCallBack');
     } else if (isCallBack === 'yes') {
       cmapp.authCallBack = '';
-      cmapp.clearStorage('isCallBack');
+      cmapp.removeStorage('isCallBack');
     }
   }
   /**
@@ -323,7 +331,7 @@ class cmappClass {
       });
       const openid = responseData.isSuccess && responseData.data && responseData.data.list && responseData.data.list.openid || null;
       openid && cmapp.setStorage('openid', openid);
-      !openid && cmapp.clearStorage('openid');
+      !openid && cmapp.removeStorage('openid');
       resolve(openid);
     });
   }
@@ -391,7 +399,7 @@ class cmappClass {
     if (query && query[k]) {
       cmapp.setStorage(k, decodeURIComponent(query[k]));
     } else {
-      cmapp.clearStorage(k);
+      cmapp.removeStorage(k);
     }
   }
   /**
@@ -477,11 +485,7 @@ class cmappClass {
     if (!userInfo) {
       path = d.shareIndex ? `${d.shareIndex}` : `/pages/${t.$config.project.dir}/index`;
     }
-    if (path.indexOf('?') > -1) {
-      path += '&';
-    } else {
-      path += '?';
-    }
+    path +=  path.includes('?') ? '&' : '?';
     path += `shareId=${cmapp.getStorage('openid') ? cmapp.getStorage('openid') : ''}`;
     path += `&scene=${cmapp.getStorage('scene') ? cmapp.getStorage('scene') : ''}`;
     if (d.shareUrl) {
@@ -555,121 +559,149 @@ class cmappClass {
     // #endif
     // #endif
   }
-  tsCity(c:string) { // 删除市、区、县 三字
-    const lastStr:any = c.substr(c.length - 1);
-    const arr:Array<string> = ['市', '区', '县'];
-    if (arr.includes(lastStr) && c.length > 2) {
-      c = c.slice(0, -1);
+  tsCity(cityName:string) { // 删除市、区、县 三字
+    const lastStr:any = cityName.substr(cityName.length - 1);
+    const filterWords:Array<string> = ['市', '区', '县'];
+    if (filterWords.includes(lastStr) && cityName.length > 2) {
+      cityName = cityName.slice(0, -1);
     }
-    return c;
+    return cityName;
   }
-  lt10(m:any) { // 0~9前加0
-    const a:any = m < 10 ? `0${m}` : m;
-    return m < 10 ? `0${m}` : m;
+  lessThan10(num: any) { // 0~9前加0
+    return num < 10 ? `0${num}` : num;
   }
   /*
  * 1，当前日期时间戮  cmapp.nowTime(0,0);
  * 2，日期转时间戮  cmapp.nowTime(0,'2017-01-01');
  * 3，时间戮转日期  cmapp.nowTime(1,'1500002222',f);//f为格式
  * */
-  nowTime(tp:any, nd:any, f:any) {
-    const cmapp:any = this;
-    let n:any = null;
-    let t:any = null;
-    if (nd) {
-      n = new Date(nd);
+  nowTime(type: any, dateTime: any, format: any, isMillisecond: any) {
+    let nowTime: any = null;
+    let value: any = null;
+    if (dateTime) {
+      nowTime = new Date(dateTime);
     } else {
-      n = new Date();
+      nowTime = new Date();
     }
-    if (tp === 0) { // 日期转时间戮
-      const v:any = n.valueOf() / 1000;
-      t = parseInt(v, 10);
+    if (type === 0) { // 日期转时间戮
+      const v: any = nowTime.valueOf() / 1000;
+      if (isMillisecond) {
+        return nowTime.valueOf();
+      }
+      value = parseInt(v, 10);
     } else { // 时间戮转日期
-      const y:any = n.getFullYear();
-      const m:any = cmapp.lt10(n.getMonth() + 1);
-      const d:any = cmapp.lt10(n.getDate());
-      const h:any = cmapp.lt10(n.getHours());
-      const m2:any = cmapp.lt10(n.getMinutes());
-      const s:any = cmapp.lt10(n.getSeconds());
-      switch (f) {
+      const y: any = nowTime.getFullYear();
+      const m: any = this.lessThan10(nowTime.getMonth() + 1);
+      const d: any = this.lessThan10(nowTime.getDate());
+      const h: any = this.lessThan10(nowTime.getHours());
+      const m2: any = this.lessThan10(nowTime.getMinutes());
+      const s: any = this.lessThan10(nowTime.getSeconds());
+      switch (format) {
         case 1:
-          t = `${y}-${m}-${d} ${h}:${m2}:${s}`;
+          value = `${y}-${m}-${d} ${h}:${m2}:${s}`;
           break;
         case 2:
-          t = `${y}/${m}/${d} ${h}:${m2}:${s}`;
+          value = `${y}/${m}/${d} ${h}:${m2}:${s}`;
           break;
         case 3:
-          t = `${y}/${m}/${d}`;
+          value = `${y}/${m}/${d}`;
           break;
         case 4:
-          t = `${y}/${m}`;
+          value = `${y}/${m}`;
           break;
         case 5:
-          t = `${m}/${d}`;
+          value = `${m}/${d}`;
           break;
         case 6:
-          t = `${y}-${m}-${d}`;
+          value = `${y}-${m}-${d}`;
           break;
         case 7:
-          t = `${y}-${m}`;
+          value = `${y}-${m}`;
           break;
         case 8:
-          t = `${m}-${d}`;
+          value = `${m}-${d}`;
           break;
         case 9:
-          t = `${h}:${m2}:${s}`;
+          value = `${h}:${m2}:${s}`;
           break;
         case 10:
-          t = `${y}年${m}月${d}日`;
+          value = `${y}年${m}月${d}日`;
+          break;
+        case 11:
+          value = `${y}-${m}-${d} ${h}:${m2}`;
+          break;
+        case 12:
+          value = `${y}/${m}/${d} ${h}:${m2}`;
+          break;
+        case 13:
+          value = `${y}年${m}月${d}日 ${h}:${m2}`;
           break;
         default:
-          t = `${y}-${m}-${d}`;
+          value = `${y}-${m}-${d}`;
           break;
       }
     }
-    return t;
+    return value;
   }
   /**
    * 倒计时(进度条显示的时间)
-   * @param time 结束时间戮
-   * @param type 返回类型
    */
-  jdtTime(time:any, type:any, isFan:any) {
-    let nd:any = new Date().valueOf();
-    let jdt:any = 0;
-    const arr:Array<any> = [3600, 24, 60, 10];
-    let time2:any = time;
+   countDownTime(time: any, type: any, isFan: any) {
+    let nowTime: any = new Date().valueOf();
+    let jdt: any = 0;
+    const arr: Array<any> = [3600, 24, 60, 10];
+    let time2: any = time;
     if (isFan) {
-      const a:any = nd;
-      nd = time2;
+      const a: any = nowTime;
+      nowTime = time2;
       time2 = a;
     }
-    if (time2 && time2 > nd) {
-      const v1:any = (time2 - nd) / (arr[3] * arr[3] * arr[3]);
-      const n:number = parseInt(v1, arr[3]);
-      const v2:any = n / (arr[0] * arr[1]);
-      const d:number = parseInt(v2, arr[3]);
-      const v3:any = ((n - d * arr[0] * arr[1]) / arr[0]);
-      const h:number = parseInt(v3, arr[3]);
-      const v4:any = ((n - d * arr[0] * arr[1] - h * arr[0]) / arr[2]);
-      const m:number = parseInt(v4, arr[3]);
-      const s:any = n - d * arr[0] * arr[1] - h * arr[0] - m * arr[2];
-      jdt = `${d}天${h}时${m}分${s}秒`;
-      if (d <= 0) {
+    if (time2 && time2 > nowTime) {
+      const v1: any = (time2 - nowTime) / (arr[3] * arr[3] * arr[3]);
+      const n: number = parseInt(v1, arr[3]);
+      const v2: any = n / (arr[0] * arr[1]);
+      const day: number = parseInt(v2, arr[3]);
+      const v3: any = ((n - day * arr[0] * arr[1]) / arr[0]);
+      const hour: number = parseInt(v3, arr[3]);
+      const v4: any = ((n - day * arr[0] * arr[1] - hour * arr[0]) / arr[2]);
+      const minutes: number = parseInt(v4, arr[3]);
+      const seconds: any = n - day * arr[0] * arr[1] - hour * arr[0] - minutes * arr[2];
+      jdt = `${day}天${hour}时${minutes}分${seconds}秒`;
+      if (day <= 0) {
         if (type === 1) {
-          jdt = `${h}时${m}分${s}秒`;
+          jdt = `${hour}时${minutes}分${seconds}秒`;
         }
-        if (h <= 0 && type === 2) {
-          jdt = `${m}分${s}秒`;
+        if (hour <= 0 && type === 2) {
+          jdt = `${minutes}分${seconds}秒`;
         }
       }
       if (type === 3) {
         jdt = {
-          d: d, h: h, m: m, s: s,
+          day: day, hour: hour, minutes: minutes, seconds: seconds,
         };
       }
     }
     return jdt;
+  }
+  checkMobile(value: any) {
+    let reg: string = '^[1][3,4,5,6,7,8,9][0-9]{9}$';
+    const regExp: any = new RegExp(reg);
+    return regExp.test(value);
+  }
+  isIllegalMobile(value: any, txt = '手机号码') {
+    let message = [`${txt}正确`, `请输入11位${txt}`, `${txt}必须为11位数字`, `${txt}格式为1(3~9)开头`];
+    let illegalId = 0;
+    if (!value || value.length !== 11) {
+      illegalId = 1;
+    } else if (!this.checkWord(value, 1)) {
+      illegalId = 2;
+    } else if (!this.checkMobile(value)) {
+      illegalId = 3;
+    }
+    return {
+      illegalId,
+      message: message[illegalId],
+    };
   }
   /**
    * 默认type=0:只限中文、英文
@@ -684,8 +716,9 @@ class cmappClass {
    * @param type
    * @returns {*}
    */
-  checkWord(v:any, type:any) {
-    let reg:string = '^[A-Za-z\u4e00-\u9fa5]+$';
+   checkWord(value: any, type: any) {
+    let reg: string = '^[A-Za-z\u4e00-\u9fa5]+$';
+
     switch (type) {
       case 1:
         reg = '^[0-9]+$';
@@ -707,12 +740,14 @@ class cmappClass {
         break;
       case 7:
         reg = '^[A-Za-z0-9.\u4e00-\u9fa5]+$';
+      case 8:
+        reg = '^[0-9-]+$';
         break;
       default:
         break;
     }
-    const re:any = new RegExp(reg);
-    return re.test(v);
+    const regExp: any = new RegExp(reg);
+    return regExp.test(value);
   }
   openWxSetting(func:any, func2:any) {// 打开设置
     const cmapp:any = this;
@@ -892,78 +927,115 @@ class cmappClass {
       }
     }, cmapp.getLocation);
   }
-  // 获取微信运动数据
-  getWeiRun(func:any ) {
-    const cmapp:any = this;
-    // @ts-ignore
-    uni.getWeRunData({
-      success(res:any) {
-        cmapp.setStorage('isWerRun', 'yes');
-        func(2, res);
-      },
-      fail(res:any) {
-        cmapp.setStorage('isWerRun', 'no');
-        func(1, res);
-      },
-    });
-  }
   /**
    * 重置动画
-   * @param t
+   * @param $vue
    */
-  animationReset(t:any) {
-    const animation:any = uni.createAnimation({
+   animationReset($vue: any) {
+    const animation: any = uni.createAnimation({
       duration: 100,
     });
     animation.rotate(0).step();
-    t.animationData = animation.export();
+    $vue.animationData = animation.export();
   }
   /**
    * 指定div或图左右摇摆的动画
-   * @param t
+   * @param $vue
    * @param animationAngle 摇摆角度
    * @param maxRun 摇摆次数
    * @param duration 每次摇摆的时间
-   * div中必有 :animation="animationData"
+   * @param callback
+   * div中必有 :animation='animationData'
    * data中必有 animationData = {}字段
    */
-  animationShake(t:any, animationAngle = -10, maxRun = 6, duration = 500, func:any) {
-    const cmapp:any = this;
-    const animationRun:any = uni.createAnimation({
+  animationShake($vue: any, animationAngle = -10, maxRun = 6, duration = 500, callback: any) {
+    const $cmapp: any = this;
+    const animationRun: any = uni.createAnimation({
       duration: duration,
       timingFunction: 'ease',
     });
     animationRun.rotate(animationAngle).step();
-    t.animationData = animationRun.export();
-    let num:number = 0;
+    $vue.animationData = animationRun.export();
+    let num: number = 0;
     const thisShake = setInterval(() => {
       num += 1;
-      if (num > maxRun || t.animationEnd) {
-        t.animationEnd = false;
-        cmapp.animationReset(t);
+      if (num > maxRun || $vue.animationEnd) {
+        $vue.animationEnd = false;
+        $cmapp.animationReset($vue);
         clearInterval(thisShake);
-        if (typeof func === 'function') {
-          func();
+        if (typeof callback === 'function') {
+          callback();
         }
         return;
       }
       animationAngle = -animationAngle;
       animationRun.rotate(animationAngle).step();
-      t.animationData = animationRun.export();
+      $vue.animationData = animationRun.export();
     }, duration + 5);
   }
   /**
-   * 内部 audio 音乐播放
+   * showToast方法封装
+   * @param title 内容
+   * @param icon 图标
+   * @param duration 持续时间
    */
-  innerAudio(url:string, autoplay = true) {
-    const i:any = uni.createInnerAudioContext();
-    i.autoplay = autoplay;
-    i.src = url;
-    i.onPlay(() => {
-      console.log('innerAudio play');
+   showToast(title = '网络出错了', icon = 'none', duration = 2000, position = 'center') {
+    return new Promise((resolve: any) => {
+      const params: any = {
+        title,
+        icon,
+        duration,
+        position,
+        mask: true,
+        complete: (res:any) => {
+          setTimeout(() => {
+            resolve(res);
+          }, duration);
+        }
+      }
+      uni.showToast(params);
     });
-    i.onError((res:any) => {
-      console.log(res.errMsg, '-->', res.errCode);
+  }
+  /**
+   * 内部 audio 音乐播放
+   * @param audioUrl
+   * @param autoplay
+   */
+   toPlayAudio(audioUrl: string, autoplay = true) {
+    const $cmapp: any = this;
+    return new Promise((resolve, reject) => {
+      if (this.innerAudioContext) {
+        this.innerAudioContext.destroy();
+      }
+      this.innerAudioContext = uni.createInnerAudioContext();
+      this.innerAudioContext.autoplay = autoplay;
+      this.innerAudioContext.src = audioUrl;
+      this.innerAudioContext.play();
+      this.innerAudioContext.onPlay(() => {
+        this.showToast('播放成功');
+        resolve({
+          isSuccess: 1,
+          message: '播放成功',
+          errCode: 0,
+          innerAudioContext: $cmapp.innerAudioContext
+        });
+      });
+      this.innerAudioContext.onError((responseData: any) => {
+        this.showToast('播放失败');
+        reject({
+          isSuccess: 0,
+          message: responseData,
+          errCode: 0,
+          innerAudioContext: this.innerAudioContext
+        });
+      });
+      this.innerAudioContext.onEnded(() => {
+        this.innerAudioContext.destroy();
+        this.showToast('播放已结束');
+      });
+      this.innerAudioContext.onStop((responseData: any) => {
+        this.showToast('播放已停止');
+      });
     });
   }
   /**
@@ -971,33 +1043,28 @@ class cmappClass {
    * @param isCanvas yes为从canvas保存过去，no为普通保存
    * @param id isCanvas=yes时必填
    * @param filePath isCanvas=no时必填
-   * @param func
+   * @param callback
    */
-  saveImageToPhotosAlbum(isCanvas = 'no', id:any, filePath:any, func:any) {
+   saveImageToPhotosAlbum(isCanvas = 'no', id: any, filePath: any, callback: any) {
+    const $cmapp: any = this;
     uni.showLoading({ title: '保存中..' });
-    let ts:object = {
-      title: '保存失败',
-      icon: 'none',
-    };
-    const save:any = (path:string) => {
+    let toast: string = '保存失败';
+    const save: any = (path: string) => {
       uni.saveImageToPhotosAlbum({
         filePath: path,
         success() {
           uni.hideLoading();
-          ts = {
-            title: '保存成功',
-            icon: 'success',
-          };
-          uni.showToast(ts);
+          toast = '保存成功';
+          $cmapp.showToast(toast);
           setTimeout(() => {
-            if (typeof func === 'function') {
-              func();
+            if (typeof callback === 'function') {
+              callback();
             }
           }, 2000);
         },
         fail() {
           uni.hideLoading();
-          uni.showToast(ts);
+          $cmapp.showToast(toast);
         },
       });
     };
@@ -1007,29 +1074,29 @@ class cmappClass {
     }
     uni.canvasToTempFilePath({
       canvasId: id,
-      success(res:any) {
-        save(res.tempFilePath);
+      success(responseData: any) {
+        save(responseData.tempFilePath);
       },
       fail() {
         uni.hideLoading();
-        uni.showToast(ts);
+        $cmapp.showToast(toast);
       },
     });
   }
   /**
    * canvas内文本自动换行
-   * @param ctx getContext("2d") 对象
+   * @param ctx getContext('2d') 对象
    * @param lineheight 行高
    * @param bytelength 每行字数
    * @param text 文本
    * @param startleft 开始x坐标
    * @param starttop 开始y坐标
    */
-  canvasTextAutoLine(ctx:any, lineheight:any, bytelength:any, text:any, startleft:any, starttop:any) {
-    const getTrueLength:any = (str:any) => {
-      const len:any = str.length;
-      let truelen:any = 0;
-      for (let x:any = 0; x < len; x++) {
+   canvasTextAutoLine(ctx: any, lineheight: any, bytelength: any, text: any, startleft: any, starttop: any) {
+    const getTrueLength: any = (str: any) => {
+      const length: any = str.length;
+      let truelen: any = 0;
+      for (let x: any = 0; x < length; x++) {
         if (str.charCodeAt(x) > 128) {
           truelen += 2;
         } else {
@@ -1038,11 +1105,11 @@ class cmappClass {
       }
       return truelen;
     };
-    const cutString:any = (str:any, leng:any) => {
-      const len:any = str.length;
-      let tlen:any = len;
-      let nlen:any = 0;
-      for (let x:any = 0; x < len; x++) {
+    const cutString: any = (str: any, leng: any) => {
+      const len: any = str.length;
+      let tlen: any = len;
+      let nlen: any = 0;
+      for (let x: any = 0; x < len; x++) {
         if (str.charCodeAt(x) > 128) {
           if (nlen + 2 < leng) {
             nlen += 2;
@@ -1062,46 +1129,105 @@ class cmappClass {
       }
       return tlen;
     };
-    for (let i:any = 1; getTrueLength(text) > 0; i++) {
-      const tl:any = cutString(text, bytelength);
+    for (let i: any = 1; getTrueLength(text) > 0; i++) {
+      const tl: any = cutString(text, bytelength);
       ctx.fillText(text.substr(0, tl).replace(/^\s+|\s+$/, ''), startleft, (i - 1) * lineheight + starttop);
       text = text.substr(tl);
     }
   }
   /**
-   * 检测是否切换过环境
-   * @param t
-   */
-  checkEnv(t:any) {
-    const cmapp:any = this;
-    const env:any = cmapp.getStorage('env');
-    if (env && env !== t.$config.project.env) {
-      cmapp.clearStorage('');
-    }
-    cmapp.setStorage('env', t.$config.project.env);
-  }
-  /**
    * 返回到已打开的某个页面
-   * @param url 为要返回到的那个页面的路由地址，如pages/index
-   * 如果是要返回到某个页面时并要打开在这个页面才有的入口页面，
-   * 则用@param url2, 为返回到url时要再进入的页面
+   * @param url 为要返回到的那个页面的路由地址，如pages/aiplat/index
+   * @param url2 如果是要返回到某个页面时并要打开在这个页面才有的入口页面，返回到url时要再进入url2
+   * @param callback
    */
-  backTo(url:string, url2:string) {
-    const p:any = getCurrentPages();
-    const b:any = p.filter((x: { route: string; }) => x.route === url);
-    if (b && b.length > 0) {
-      const c:any = p.length - p.indexOf(b[0]) - 1;
-      uni.navigateBack({
-        delta: c,
-      });
-      if (url2) {
-        setTimeout(() => {
-          uni.navigateTo({
-            url: url2,
-          });
-        }, 100);
+   backTo(url: string, url2: string) {
+    const currentPages: any = getCurrentPages();
+    const isCurrentPage: any = currentPages.filter((x: { route: string; }) => x.route === url);
+    return new Promise((resolve: any) => {
+      if (isCurrentPage && isCurrentPage.length > 0) {
+        const page: any = currentPages.length - currentPages.indexOf(isCurrentPage[0]) - 1;
+        uni.navigateBack({
+          delta: page,
+        });
+        if (url2) {
+          setTimeout(() => {
+            uni.navigateTo({
+              url: url2,
+            });
+          }, 100);
+        }
       }
+      resolve();
+    });
+  }
+  openLocation(latitude: any, longitude: any, name: string, address: string) {
+    latitude = parseFloat(latitude);
+    longitude = parseFloat(longitude);
+    this.getUniApi(uni.openLocation, {
+      latitude,
+      longitude,
+      scale: 18,
+      name,
+      address,
+    }).then((responseData:any) => {
+      console.log(responseData);
+    }).catch((responseData:any) => {
+      console.log(responseData);
+    });
+  }
+  onAccelerometerChange($vue: any, url:string) {
+    this.getUniApi(uni.getSystemInfo).then(() => {
+      uni.onAccelerometerChange((e: any) => {
+        const pages: any = getCurrentPages();
+        const currentPage: any = pages[pages.length - 1];
+        if (currentPage.route === url) {
+          currentPage.$vm.onAccelerometerChange(e);
+        }
+      });
+    }).catch((responseData:any) => {
+      console.log(responseData);
+    });
+  }
+  scrollTo(scrollTop: number, duration: number, selector: string) {
+    return new Promise<void>((resolve) => {
+      const params: object = {
+        scrollTop: scrollTop || 0,
+        duration: duration || 999,
+        selector: selector || '',
+        complete: () => {
+          resolve();
+        }
+      };
+      uni.pageScrollTo(params);
+    });
+  }
+  eventListener(type: string, eventName: any, func: any) {
+    if (!eventName) {
+      return;
     }
+    if (type === 'dispatchEvent') {
+      const event: any = new Event(eventName);
+      event && window.dispatchEvent(event);
+      return;
+    }
+    window.addEventListener(eventName, func);
+  }
+  showInfo(title:any,content:any, showCancel:any, cancelText:any, confirmText:any, confirmColor:any, completeFunction:any) {
+    if (!content) {
+      return;
+    }
+    uni.showModal({
+      title: title || '温馨提示',
+      content: content,
+      showCancel: showCancel || false,
+      cancelText: cancelText || '取消',
+      confirmText: confirmText || '确定',
+      confirmColor: confirmColor || '#ff8b15',
+      complete: (res:any)=>{
+        completeFunction && completeFunction(res);
+      }
+    });
   }
   getAppType() {
     if (!window) {
@@ -1118,45 +1244,35 @@ class cmappClass {
     return 'pc'; // pc
   }
   async setEnvironmentInfo($vue: any) {
-    const environmentInfo: any = {
-      userAgent: null,
-      isElectron: 0, // 是否为electron环境
-      isWeixin: 0, // 微信环境
-      isWechat: 0, // 公众号环境
-      isWxwork: 0, // 企业微信环境
-      isDevtools: 0, // 微信开发者工具环境
-      isApp: 0, // app环境
-      isHvoi: 0, // 特定手机或系统
-      isWebview: this.getQuery($vue, 'isWebview') ? 1 : 0, // 是否为内嵌的webview
-      appType: this.getAppType()
-    };
+    this.environmentInfo.isMiniprogram = !window;
+    this.environmentInfo.isWebview = this.getQuery($vue, 'isWebview') ? 1 : 0;
+    this.environmentInfo.appType = this.getAppType();
     // #ifdef APP-PLUS
-    environmentInfo.isApp = 1;
+    this.environmentInfo.isApp = 1;
     // #endif
     const weixinType = this.getQuery($vue, 'weixinType') || this.getStorage('weixinType');
     if (weixinType) {
       this.setStorage('weixinType', weixinType);
     }
     // #ifdef H5
-    environmentInfo.userAgent = window.navigator.userAgent.toLowerCase();
-    environmentInfo.isElectron = environmentInfo.userAgent.includes('electron') ? 1 : 0;
-    environmentInfo.isWeixin = environmentInfo.userAgent.includes('micromessenger') ? 1 : 0;
-    environmentInfo.isWxwork = environmentInfo.userAgent.includes('wxwork') ? 1 : 0;
-    environmentInfo.isWechat = (environmentInfo.isWeixin && !environmentInfo.isWxwork) || environmentInfo.userAgent.includes('wechat') ? 1 : 0;
-    environmentInfo.isDevtools = environmentInfo.userAgent.includes('wechatdevtools') ? 1 : 0;
-    environmentInfo.isApp = environmentInfo.userAgent.includes('html5plus') ? 1 : 0;
-    const hvoi = environmentInfo.userAgent.includes('huawei') || environmentInfo.userAgent.includes('vivo') || environmentInfo.userAgent.includes('oppo') || environmentInfo.userAgent.includes('iphone');
-    environmentInfo.isHvoi = hvoi ? 1 : 0;
+    this.environmentInfo.userAgent = window.navigator.userAgent.toLowerCase();
+    this.environmentInfo.isElectron = this.environmentInfo.userAgent.includes('electron') ? 1 : 0;
+    this.environmentInfo.isWeixin = this.environmentInfo.userAgent.includes('micromessenger') ? 1 : 0;
+    this.environmentInfo.isWxwork = this.environmentInfo.userAgent.includes('wxwork') ? 1 : 0;
+    this.environmentInfo.isWechat = (this.environmentInfo.isWeixin && !this.environmentInfo.isWxwork) || this.environmentInfo.userAgent.includes('wechat') ? 1 : 0;
+    this.environmentInfo.isDevtools = this.environmentInfo.userAgent.includes('wechatdevtools') ? 1 : 0;
+    this.environmentInfo.isApp = this.environmentInfo.userAgent.includes('html5plus') ? 1 : 0;
+    const hvoi = this.environmentInfo.userAgent.includes('huawei') || this.environmentInfo.userAgent.includes('vivo') || this.environmentInfo.userAgent.includes('oppo') || this.environmentInfo.userAgent.includes('iphone');
+    this.environmentInfo.isHvoi = hvoi ? 1 : 0;
     // #endif
     if (weixinType === 'wechat') {
-      environmentInfo.isWechat = 1;
-      environmentInfo.isWxwork = 0;
+      this.environmentInfo.isWechat = 1;
+      this.environmentInfo.isWxwork = 0;
     }
     if (weixinType === 'wxwork') {
-      environmentInfo.isWechat = 0;
-      environmentInfo.isWxwork = 1;
+      this.environmentInfo.isWechat = 0;
+      this.environmentInfo.isWxwork = 1;
     }
-    this.environmentInfo = environmentInfo;
     $vue.$forceUpdate();
   }
 }

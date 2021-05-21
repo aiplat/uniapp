@@ -10,7 +10,8 @@
   </view>
 </template>
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
+@Component({})
 export default class h5Page extends Vue {
   isLoadEnd = 0;
   webSite = "";
@@ -35,14 +36,8 @@ export default class h5Page extends Vue {
       title: (query && query.title) || "h5站点",
     });
   }
-  onShow() {
-    this.$cmapp.setNavigationBarColor();
-  }
-  onPullDownRefresh() {
-    setTimeout(() => {
-      this.initStart();
-      uni.stopPullDownRefresh();
-    }, 1000);
-  }
+  // onShow() {
+  //   this.$cmapp.setNavigationBarColor();
+  // }
 }
 </script>

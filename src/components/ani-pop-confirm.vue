@@ -38,7 +38,8 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
+@Component({})
 export default class aniPopConfirm extends Vue {
   @Prop({ type: String, default: "no" }) confirmIsShow: any;
   @Prop({

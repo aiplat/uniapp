@@ -138,6 +138,9 @@ export default class indexPage extends Vue {
       shareUrl: "",
     });
   }
+  onLoad() {
+    console.log(this.$cmapp.environmentInfo);
+  }
   onShow() {
     this.$cmapp.setNavigationBarColor();
     console.log(this);
