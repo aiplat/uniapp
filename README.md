@@ -1,6 +1,6 @@
 # uniapp vue-cli4 typescript版本
 
- - vue-cli4 + vuex + cmui + html5 + css3 + typescript
+ - vue-cli4 + vuex + cmui + html5 + css3 + typescript + electron
  - 一次开发，同时打包成Android版app、iOS版app、H5版、微信小程序版、支付宝小程序版、头条小程序、PC安装包平台这几个平台，界面统一，功能一致。
  - 新引入electron用于支持打包PC端(Windows、Mac、Linux)安装包, 后续也关注鸿蒙系统
  - cmui仓库为https://github.com/aiplat/cmui.git
