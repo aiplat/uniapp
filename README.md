@@ -1,22 +1,12 @@
 # uniapp vue-cli4 typescript版本
 
- - vue-cli4+vuex+cmui+html5+css3+typescript
+ - vue-cli4 + vuex + cmui + html5 + css3 + typescript
  - 一次开发，同时打包成Android版app、iOS版app、H5版、微信小程序版、支付宝小程序版、头条小程序、PC安装包平台这几个平台，界面统一，功能一致。
  - 新引入electron用于支持打包PC端(Windows、Mac、Linux)安装包, 后续也关注鸿蒙系统
  - cmui仓库为https://github.com/aiplat/cmui.git
  - 代码示例为 https://aiplat.com 的版本 http://uniapp.aiplat.com
  - 基于 https://uniapp.dcloud.io/ 的uni-app
  - 基于本仓库所开发的‘娱乐计分器’已经成功上线微信、头条、支付宝三大程序，暂不开源。各框架在升级中。
-
-### 运行环境截图，screenshot目录，示例为aiplat项目
-#### 后面主要适配这几个平台, 如果也能适配到鸿蒙系统是最好
- - app-plus: android、ios
- - electron: PC安装包平台
- - h5: h5(pc web、mobile web)
- - mp-alipay: 支付宝小程序
- - mp-toutiao: 头条小程序
- - mp-weixin: 微信小程序
- - 注意：百度小程序、QQ小程序、快应用、360小程序这4个平台uni-app也是支持的，本示例没有运行与构建这4个平台论证。
 
 ---
 
@@ -75,6 +65,7 @@
  - 打开微信开发者工具->小程序->导入项目->选择dist/dev/mp-weixin
  - 若有多个项目同一个仓库，$ npm run dev --env=uat --type=** 区分
 
+
 # 打包项目
  - $ npm run build (默认构建h5)
  - $ npm run build:mp-weixin   (微信小程序构建)
@@ -87,7 +78,6 @@
  - 开发工具为任意，不一定要HbuilderX.如果也要同时打包成app，再导入项目到HbuilderX打包。
  - 开发或构建成其他平台命令：
  - dev为开发模式，build为构建模式
- - 这七个平台标识：mp-alipay、mp-baidu、mp-qq、mp-toutiao、app-plus（包含安卓和ios）、h5(默认)、mp-weixin
  - 参数--env=uat为环境参数，默认uat。
  - 参数--type=aiplat为项目名，默认aiplat。
  - 例如：
@@ -97,6 +87,16 @@
  - $ npm run build:mp-weixin --env=uat --type=** 为微信小程序平台->uat环境(测试环境)->构建模式
  - $ npm run build:mp-weixin --env=ver --type=** 为微信小程序平台->ver环境(预生产环境)->构建模式
  - $ npm run build:mp-weixin --env=pro --type=** 为微信小程序平台->pro环境(生产环境)->构建模式
+
+#### 运行环境截图，screenshot目录，示例为aiplat项目
+#### 平台标识: 后面主要适配这几个平台, 如果也能适配到鸿蒙系统是最好
+ - app-plus: android、ios
+ - electron: PC安装包平台
+ - h5: h5(pc web、mobile web)
+ - mp-alipay: 支付宝小程序
+ - mp-toutiao: 头条小程序
+ - mp-weixin: 微信小程序
+ - 注意：百度小程序、QQ小程序、快应用、360小程序这4个平台uni-app也是支持的，本示例没有运行与构建这4个平台论证。
 
 ---
 
