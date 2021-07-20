@@ -39,7 +39,7 @@ class configClass{
       newFile:`${utilsParams.currentDir}/src/manifest.json`,
     });
     utilsClass.buildFile({
-      oldFile:`${utilsParams.currentDir}/src/projects/${utilsParams.type}/selfConfig.ts`,
+      oldFile:`${utilsParams.currentDir}/src/projects/${utilsParams.type}/builds/selfConfig.ts`,
       newFile:`${utilsParams.currentDir}/src/builds/selfConfig.ts`,
     });
     console.log('');
